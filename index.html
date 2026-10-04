@@ -9,12 +9,12 @@
       content="width=device-width, initial-scale=1.0">
 
 <title>
-WebGIS Ekosistem Mangrove Desa Sidodadi
+WebGIS Kesehatan Ekosistem Mangrove
 </title>
 
 
 <!-- =====================================================
-     LEAFLET CSS
+     LEAFLET
 ===================================================== -->
 
 <link
@@ -24,7 +24,7 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 
 
 <!-- =====================================================
-     LEAFLET GEO RASTER
+     GEORASTER
 ===================================================== -->
 
 <script
@@ -45,6 +45,7 @@ src="https://unpkg.com/georaster-layer-for-leaflet@4.1.0/dist/georaster-layer-fo
 * {
     box-sizing: border-box;
 }
+
 
 body {
 
@@ -68,7 +69,7 @@ body {
 
 .header {
 
-    height: 80px;
+    height: 78px;
 
     background:
         linear-gradient(
@@ -98,7 +99,7 @@ body {
 
     font-size: 24px;
 
-    letter-spacing: 0.5px;
+    font-weight: 700;
 
 }
 
@@ -115,14 +116,15 @@ body {
 
 
 /* =====================================================
-   MAIN LAYOUT
+   LAYOUT
 ===================================================== */
 
 .main {
 
     display: flex;
 
-    height: calc(100vh - 80px);
+    height:
+        calc(100vh - 78px);
 
 }
 
@@ -133,7 +135,7 @@ body {
 
 .sidebar {
 
-    width: 310px;
+    width: 300px;
 
     background: white;
 
@@ -152,9 +154,9 @@ body {
 
 .sidebar h2 {
 
-    font-size: 18px;
-
     margin-top: 0;
+
+    font-size: 19px;
 
 }
 
@@ -184,7 +186,7 @@ body {
 
 
 /* =====================================================
-   YEAR SELECTOR
+   SELECT TAHUN
 ===================================================== */
 
 .year-label {
@@ -200,7 +202,7 @@ body {
 
     width: 100%;
 
-    padding: 11px;
+    padding: 10px;
 
     margin-top: 7px;
 
@@ -219,7 +221,7 @@ body {
 
 
 /* =====================================================
-   YEAR BUTTON
+   BUTTON TAHUN
 ===================================================== */
 
 .year-buttons {
@@ -270,7 +272,7 @@ body {
 
 
 /* =====================================================
-   INFO BOX
+   INFO
 ===================================================== */
 
 .info-box {
@@ -285,6 +287,8 @@ body {
     border-radius: 5px;
 
     font-size: 13px;
+
+    line-height: 1.7;
 
 }
 
@@ -309,7 +313,7 @@ body {
 
 .legend-color {
 
-    width: 24px;
+    width: 25px;
 
     height: 18px;
 
@@ -321,35 +325,58 @@ body {
 }
 
 
-/* 5 KELAS */
+/* =====================================================
+   WARNA KELAS
+   DISESUAIKAN DENGAN TAMPILAN ARC GIS PRO
+===================================================== */
+
+
+/* Kelas 1 */
 
 .class-1 {
 
-    background: #d73027;
+    background:
+        #d7191c;
 
 }
+
+
+/* Kelas 2 */
 
 .class-2 {
 
-    background: #fc8d59;
+    background:
+        #fdae61;
 
 }
+
+
+/* Kelas 3 */
 
 .class-3 {
 
-    background: #fee08b;
+    background:
+        #ffffbf;
 
 }
+
+
+/* Kelas 4 */
 
 .class-4 {
 
-    background: #91cf60;
+    background:
+        #a6d96a;
 
 }
 
+
+/* Kelas 5 */
+
 .class-5 {
 
-    background: #1a9850;
+    background:
+        #1a9641;
 
 }
 
@@ -379,9 +406,9 @@ body {
 
     right: 20px;
 
-    width: 470px;
+    width: 500px;
 
-    max-height: 260px;
+    max-height: 270px;
 
     overflow-y: auto;
 
@@ -413,7 +440,8 @@ table {
 
     width: 100%;
 
-    border-collapse: collapse;
+    border-collapse:
+        collapse;
 
     font-size: 12px;
 
@@ -422,7 +450,8 @@ table {
 
 th {
 
-    background: #1d5b43;
+    background:
+        #1d5b43;
 
     color: white;
 
@@ -445,7 +474,8 @@ td {
 
 tr:hover {
 
-    background: #f2f5f3;
+    background:
+        #f2f5f3;
 
 }
 
@@ -454,11 +484,12 @@ tr:hover {
    MOBILE
 ===================================================== */
 
-@media(max-width: 800px) {
+@media(max-width:800px) {
 
     .main {
 
-        flex-direction: column;
+        flex-direction:
+            column;
 
     }
 
@@ -514,8 +545,8 @@ tr:hover {
         </h1>
 
         <p>
-            Desa Sidodadi, Kabupaten Pesawaran
-            | Monitoring 2021–2026
+            Desa Sidodadi, Kabupaten Pesawaran |
+            Monitoring Kesehatan Mangrove 2021–2026
         </p>
 
     </div>
@@ -553,29 +584,17 @@ tr:hover {
 
 <select id="yearSelect">
 
-    <option value="2021">
-        2021
-    </option>
+    <option value="2021">2021</option>
 
-    <option value="2022">
-        2022
-    </option>
+    <option value="2022">2022</option>
 
-    <option value="2023">
-        2023
-    </option>
+    <option value="2023">2023</option>
 
-    <option value="2024">
-        2024
-    </option>
+    <option value="2024">2024</option>
 
-    <option value="2025">
-        2025
-    </option>
+    <option value="2025">2025</option>
 
-    <option value="2026">
-        2026
-    </option>
+    <option value="2026">2026</option>
 
 </select>
 
@@ -584,41 +603,60 @@ tr:hover {
 
 <div class="year-buttons">
 
-    <button
-        class="year-button active"
-        onclick="changeYear(2021)">
-        2021
-    </button>
 
-    <button
-        class="year-button"
-        onclick="changeYear(2022)">
-        2022
-    </button>
+<button
+class="year-button active"
+onclick="changeYear(2021)">
 
-    <button
-        class="year-button"
-        onclick="changeYear(2023)">
-        2023
-    </button>
+2021
 
-    <button
-        class="year-button"
-        onclick="changeYear(2024)">
-        2024
-    </button>
+</button>
 
-    <button
-        class="year-button"
-        onclick="changeYear(2025)">
-        2025
-    </button>
 
-    <button
-        class="year-button"
-        onclick="changeYear(2026)">
-        2026
-    </button>
+<button
+class="year-button"
+onclick="changeYear(2022)">
+
+2022
+
+</button>
+
+
+<button
+class="year-button"
+onclick="changeYear(2023)">
+
+2023
+
+</button>
+
+
+<button
+class="year-button"
+onclick="changeYear(2024)">
+
+2024
+
+</button>
+
+
+<button
+class="year-button"
+onclick="changeYear(2025)">
+
+2025
+
+</button>
+
+
+<button
+class="year-button"
+onclick="changeYear(2026)">
+
+2026
+
+</button>
+
 
 </div>
 
@@ -629,100 +667,37 @@ tr:hover {
 <!-- INFORMASI -->
 
 <h3>
-    Informasi
+    Informasi Wilayah
 </h3>
 
 
 <div class="info-box">
 
-    <b>Tahun:</b>
+<b>Tahun:</b>
 
-    <span id="yearInfo">
-        2021
-    </span>
+<span id="yearInfo">
+2021
+</span>
 
-    <br><br>
+<br>
 
-    <b>Wilayah:</b>
+<b>Desa:</b>
+Sidodadi
 
-    Desa Sidodadi
+<br>
 
-    <br>
+<b>Kabupaten:</b>
+Pesawaran
 
-    <b>Kabupaten:</b>
+<br>
 
-    Pesawaran
+<b>Provinsi:</b>
+Lampung
 
-    <br>
+<br>
 
-    <b>Provinsi:</b>
-
-    Lampung
-
-</div>
-
-
-<hr>
-
-
-<!-- LEGENDA -->
-
-<h3>
-    Indeks Kesehatan Mangrove
-</h3>
-
-
-<div class="legend-item">
-
-    <span
-        class="legend-color class-1">
-    </span>
-
-    Sangat Tidak Sehat
-
-</div>
-
-
-<div class="legend-item">
-
-    <span
-        class="legend-color class-2">
-    </span>
-
-    Tidak Sehat
-
-</div>
-
-
-<div class="legend-item">
-
-    <span
-        class="legend-color class-3">
-    </span>
-
-    Sedang
-
-</div>
-
-
-<div class="legend-item">
-
-    <span
-        class="legend-color class-4">
-    </span>
-
-    Sehat
-
-</div>
-
-
-<div class="legend-item">
-
-    <span
-        class="legend-color class-5">
-    </span>
-
-    Sangat Sehat
+<b>Data:</b>
+Sentinel-2
 
 </div>
 
@@ -730,17 +705,78 @@ tr:hover {
 <hr>
 
 
+<!-- =====================================================
+     LEGENDA
+===================================================== -->
+
 <h3>
-    Keterangan
+    Kelas Kesehatan Mangrove
 </h3>
 
 
-<p style="font-size:13px; line-height:1.6;">
+<div class="legend-item">
 
-    Peta menampilkan hasil analisis
-    indeks kesehatan ekosistem mangrove
-    Desa Sidodadi berdasarkan data
-    penginderaan jauh Sentinel-2.
+<span class="legend-color class-1">
+</span>
+
+Sangat Tidak Sehat
+
+</div>
+
+
+<div class="legend-item">
+
+<span class="legend-color class-2">
+</span>
+
+Tidak Sehat
+
+</div>
+
+
+<div class="legend-item">
+
+<span class="legend-color class-3">
+</span>
+
+Sedang
+
+</div>
+
+
+<div class="legend-item">
+
+<span class="legend-color class-4">
+</span>
+
+Sehat
+
+</div>
+
+
+<div class="legend-item">
+
+<span class="legend-color class-5">
+</span>
+
+Sangat Sehat
+
+</div>
+
+
+<hr>
+
+
+<p
+style="
+font-size:13px;
+line-height:1.6;
+">
+
+Raster menampilkan kelas kesehatan
+ekosistem mangrove berdasarkan
+hasil analisis indeks NDVI, NDMI,
+dan MNDWI.
 
 </p>
 
@@ -764,33 +800,35 @@ tr:hover {
 
 <div class="table-section">
 
+
 <h3>
 
-    Tabel Indeks Kesehatan Mangrove
+Tabel Indeks Kesehatan Mangrove
 
-    <span id="tableYear">
-        2021
-    </span>
+<span id="tableYear">
+2021
+</span>
 
 </h3>
 
 
 <table>
 
+
 <thead>
 
 <tr>
 
 <th>
-    Kelas
+Kelas Kesehatan
 </th>
 
 <th>
-    Luas (Ha)
+Luas (Ha)
 </th>
 
 <th>
-    Persentase (%)
+Persentase (%)
 </th>
 
 </tr>
@@ -805,12 +843,13 @@ tr:hover {
 
 </table>
 
+
 </div>
 
 
 
 <!-- =====================================================
-     LEAFLET JS
+     LEAFLET
 ===================================================== -->
 
 <script
@@ -818,15 +857,15 @@ src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
 
 
-
 <script>
 
 
 // =====================================================
-// INISIALISASI MAP
+// INISIALISASI PETA
 // =====================================================
 
-var map = L.map('map').setView(
+var map =
+L.map('map').setView(
 
     [-5.54, 105.24],
 
@@ -836,37 +875,39 @@ var map = L.map('map').setView(
 
 
 // =====================================================
-// BASEMAP IMAGERY
+// BASEMAP SATELLITE / IMAGERY
 // =====================================================
 
-var imagery = L.tileLayer(
+var imagery =
+L.tileLayer(
 
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
 
-    {
+{
 
-        attribution:
-        'Tiles © Esri'
+    attribution:
+    'Tiles © Esri'
 
-    }
+}
 
 ).addTo(map);
 
 
 // =====================================================
-// OPENSTREETMAP
+// OPEN STREET MAP
 // =====================================================
 
-var osm = L.tileLayer(
+var osm =
+L.tileLayer(
 
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 
-    {
+{
 
-        attribution:
-        '© OpenStreetMap'
+    attribution:
+    '© OpenStreetMap contributors'
 
-    }
+}
 
 );
 
@@ -877,80 +918,146 @@ var osm = L.tileLayer(
 
 L.control.layers(
 
-    {
+{
 
-        "Satellite / Imagery":
-            imagery,
+    "Satellite / Imagery":
+        imagery,
 
-        "OpenStreetMap":
-            osm
+    "OpenStreetMap":
+        osm
 
-    }
+}
 
 ).addTo(map);
 
 
+
 // =====================================================
-// FILE RASTER
+// LOKASI FILE TIFF
 // =====================================================
 
 var rasterFiles = {
 
+
     2021:
-        'data/mangrove_2021.tif',
+    'data/mangrove_2021.tif',
+
 
     2022:
-        'data/mangrove_2022.tif',
+    'data/mangrove_2022.tif',
+
 
     2023:
-        'data/mangrove_2023.tif',
+    'data/mangrove_2023.tif',
+
 
     2024:
-        'data/mangrove_2024.tif',
+    'data/mangrove_2024.tif',
+
 
     2025:
-        'data/mangrove_2025.tif',
+    'data/mangrove_2025.tif',
+
 
     2026:
-        'data/mangrove_2026.tif'
+    'data/mangrove_2026.tif'
 
 };
 
 
+
 // =====================================================
-// CURRENT RASTER
+// RASTER AKTIF
 // =====================================================
 
 var currentRaster = null;
 
 
+
 // =====================================================
-// WARNA RASTER
+// WARNA KELAS
+//
+// SAMA UNTUK SEMUA TAHUN
+//
+// 1 = Sangat Tidak Sehat
+// 2 = Tidak Sehat
+// 3 = Sedang
+// 4 = Sehat
+// 5 = Sangat Sehat
 // =====================================================
 
 function getColor(value) {
 
 
-    if (value === 1)
-        return '#d73027';
+    // NoData
+
+    if (
+        value === null ||
+        value === undefined ||
+        isNaN(value)
+    ) {
+
+        return null;
+
+    }
 
 
-    if (value === 2)
-        return '#fc8d59';
+    // Kelas 1
+    if (
+        value >= 1 &&
+        value < 2
+    ) {
+
+        return '#d7191c';
+
+    }
 
 
-    if (value === 3)
-        return '#fee08b';
+    // Kelas 2
+    if (
+        value >= 2 &&
+        value < 3
+    ) {
+
+        return '#fdae61';
+
+    }
 
 
-    if (value === 4)
-        return '#91cf60';
+    // Kelas 3
+    if (
+        value >= 3 &&
+        value < 4
+    ) {
+
+        return '#ffffbf';
+
+    }
 
 
-    if (value === 5)
-        return '#1a9850';
+    // Kelas 4
+    if (
+        value >= 4 &&
+        value < 5
+    ) {
+
+        return '#a6d96a';
+
+    }
 
 
+    // Kelas 5
+    if (
+        value >= 5 &&
+        value <= 5
+    ) {
+
+        return '#1a9641';
+
+    }
+
+
+    // Selain kelas 1-5
     return null;
 
 }
@@ -958,13 +1065,13 @@ function getColor(value) {
 
 
 // =====================================================
-// LOAD RASTER
+// MEMUAT RASTER
 // =====================================================
 
 async function loadRaster(year) {
 
 
-    // Hapus raster lama
+    // Hapus raster sebelumnya
 
     if (currentRaster) {
 
@@ -980,64 +1087,131 @@ async function loadRaster(year) {
     try {
 
 
+        // Ambil file TIFF
+
         var response =
-            await fetch(
-                rasterFiles[year]
+        await fetch(
+
+            rasterFiles[year]
+
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                'File TIFF tidak ditemukan'
             );
 
+        }
+
+
+        // Baca TIFF
 
         var arrayBuffer =
-            await response.arrayBuffer();
+        await response.arrayBuffer();
 
+
+        // Konversi GeoTIFF
 
         var georaster =
-            await parseGeoraster(
-                arrayBuffer
-            );
+        await parseGeoraster(
+            arrayBuffer
+        );
 
+
+        console.log(
+            'Raster ' +
+            year +
+            ' berhasil dibaca'
+        );
+
+
+        console.log(
+            'Minimum:',
+            georaster.mins
+        );
+
+
+        console.log(
+            'Maximum:',
+            georaster.maxs
+        );
+
+
+        // =================================================
+        // TAMPILKAN RASTER
+        // =================================================
 
         currentRaster =
-            new GeoRasterLayer({
+        new GeoRasterLayer({
 
-                georaster:
-                    georaster,
-
-
-                opacity:
-                    0.75,
+            georaster:
+                georaster,
 
 
-                resolution:
-                    256,
+            /*
+             * OPACITY
+             *
+             * 0.85 membuat warna cukup kuat
+             * tetapi imagery masih terlihat
+             */
+
+            opacity:
+                0.85,
 
 
-                pixelValuesToColorFn:
-                    function(values) {
+            /*
+             * RESOLUTION
+             *
+             * Semakin besar =
+             * semakin detail tetapi lebih berat
+             */
+
+            resolution:
+                256,
 
 
-                        var value =
-                            values[0];
+            /*
+             * WARNA PIXEL
+             */
+
+            pixelValuesToColorFn:
+            function(values) {
 
 
-                        return getColor(
-                            value
-                        );
+                var value =
+                    values[0];
 
-                    }
 
-            });
+                return getColor(
+                    value
+                );
 
+
+            }
+
+        });
+
+
+        // Tambahkan ke peta
 
         currentRaster.addTo(
             map
         );
 
 
-        // Zoom ke raster
+        // Zoom otomatis ke raster
 
-        map.fitBounds(
+        if (
             currentRaster.getBounds()
-        );
+        ) {
+
+            map.fitBounds(
+                currentRaster.getBounds()
+            );
+
+        }
 
 
     }
@@ -1054,7 +1228,7 @@ async function loadRaster(year) {
 
             'Raster tahun ' +
             year +
-            ' belum ditemukan.\n\n' +
+            ' gagal dimuat.\n\n' +
 
             'Pastikan file berada di:\n' +
 
@@ -1071,243 +1245,240 @@ async function loadRaster(year) {
 
 
 // =====================================================
-// DATA INDEKS KESEHATAN
-// =====================================================
+// DATA TABEL
 //
-// GANTI ANGKA DI BAGIAN INI DENGAN HASIL EXCEL ANDA
+// UNTUK SEMENTARA 0
 //
-// format:
-// ['Kelas', Luas, Persentase]
-//
+// NANTI GANTI DENGAN HASIL EXCEL ANDA
 // =====================================================
 
 var healthData = {
 
 
-    2021: [
+2021: [
 
-        [
-            'Sangat Tidak Sehat',
-            0,
-            0
-        ],
+[
+'Sangat Tidak Sehat',
+0,
+0
+],
 
-        [
-            'Tidak Sehat',
-            0,
-            0
-        ],
+[
+'Tidak Sehat',
+0,
+0
+],
 
-        [
-            'Sedang',
-            0,
-            0
-        ],
+[
+'Sedang',
+0,
+0
+],
 
-        [
-            'Sehat',
-            0,
-            0
-        ],
+[
+'Sehat',
+0,
+0
+],
 
-        [
-            'Sangat Sehat',
-            0,
-            0
-        ]
+[
+'Sangat Sehat',
+0,
+0
+]
 
-    ],
-
-
-    2022: [
-
-        [
-            'Sangat Tidak Sehat',
-            0,
-            0
-        ],
-
-        [
-            'Tidak Sehat',
-            0,
-            0
-        ],
-
-        [
-            'Sedang',
-            0,
-            0
-        ],
-
-        [
-            'Sehat',
-            0,
-            0
-        ],
-
-        [
-            'Sangat Sehat',
-            0,
-            0
-        ]
-
-    ],
+],
 
 
-    2023: [
+2022: [
 
-        [
-            'Sangat Tidak Sehat',
-            0,
-            0
-        ],
+[
+'Sangat Tidak Sehat',
+0,
+0
+],
 
-        [
-            'Tidak Sehat',
-            0,
-            0
-        ],
+[
+'Tidak Sehat',
+0,
+0
+],
 
-        [
-            'Sedang',
-            0,
-            0
-        ],
+[
+'Sedang',
+0,
+0
+],
 
-        [
-            'Sehat',
-            0,
-            0
-        ],
+[
+'Sehat',
+0,
+0
+],
 
-        [
-            'Sangat Sehat',
-            0,
-            0
-        ]
+[
+'Sangat Sehat',
+0,
+0
+]
 
-    ],
-
-
-    2024: [
-
-        [
-            'Sangat Tidak Sehat',
-            0,
-            0
-        ],
-
-        [
-            'Tidak Sehat',
-            0,
-            0
-        ],
-
-        [
-            'Sedang',
-            0,
-            0
-        ],
-
-        [
-            'Sehat',
-            0,
-            0
-        ],
-
-        [
-            'Sangat Sehat',
-            0,
-            0
-        ]
-
-    ],
+],
 
 
-    2025: [
+2023: [
 
-        [
-            'Sangat Tidak Sehat',
-            0,
-            0
-        ],
+[
+'Sangat Tidak Sehat',
+0,
+0
+],
 
-        [
-            'Tidak Sehat',
-            0,
-            0
-        ],
+[
+'Tidak Sehat',
+0,
+0
+],
 
-        [
-            'Sedang',
-            0,
-            0
-        ],
+[
+'Sedang',
+0,
+0
+],
 
-        [
-            'Sehat',
-            0,
-            0
-        ],
+[
+'Sehat',
+0,
+0
+],
 
-        [
-            'Sangat Sehat',
-            0,
-            0
-        ]
+[
+'Sangat Sehat',
+0,
+0
+]
 
-    ],
+],
 
 
-    2026: [
+2024: [
 
-        [
-            'Sangat Tidak Sehat',
-            0,
-            0
-        ],
+[
+'Sangat Tidak Sehat',
+0,
+0
+],
 
-        [
-            'Tidak Sehat',
-            0,
-            0
-        ],
+[
+'Tidak Sehat',
+0,
+0
+],
 
-        [
-            'Sedang',
-            0,
-            0
-        ],
+[
+'Sedang',
+0,
+0
+],
 
-        [
-            'Sehat',
-            0,
-            0
-        ],
+[
+'Sehat',
+0,
+0
+],
 
-        [
-            'Sangat Sehat',
-            0,
-            0
-        ]
+[
+'Sangat Sehat',
+0,
+0
+]
 
-    ]
+],
+
+
+2025: [
+
+[
+'Sangat Tidak Sehat',
+0,
+0
+],
+
+[
+'Tidak Sehat',
+0,
+0
+],
+
+[
+'Sedang',
+0,
+0
+],
+
+[
+'Sehat',
+0,
+0
+],
+
+[
+'Sangat Sehat',
+0,
+0
+]
+
+],
+
+
+2026: [
+
+[
+'Sangat Tidak Sehat',
+0,
+0
+],
+
+[
+'Tidak Sehat',
+0,
+0
+],
+
+[
+'Sedang',
+0,
+0
+],
+
+[
+'Sehat',
+0,
+0
+],
+
+[
+'Sangat Sehat',
+0,
+0
+]
+
+]
 
 };
 
 
 
 // =====================================================
-// UPDATE TABLE
+// UPDATE TABEL
 // =====================================================
 
 function updateTable(year) {
 
 
     var table =
-        document.getElementById(
-            'healthTable'
-        );
+    document.getElementById(
+        'healthTable'
+    );
 
 
     table.innerHTML = '';
@@ -1319,9 +1490,9 @@ function updateTable(year) {
 
 
             var tr =
-                document.createElement(
-                    'tr'
-                );
+            document.createElement(
+                'tr'
+            );
 
 
             tr.innerHTML = `
@@ -1345,7 +1516,6 @@ function updateTable(year) {
                 tr
             );
 
-
         }
 
     );
@@ -1355,68 +1525,80 @@ function updateTable(year) {
 
 
 // =====================================================
-// CHANGE YEAR
+// GANTI TAHUN
 // =====================================================
 
 function changeYear(year) {
 
 
-    // dropdown
+    // Dropdown
 
     document.getElementById(
         'yearSelect'
-    ).value = year;
+    ).value =
+        year;
 
 
-    // informasi
+    // Informasi
 
     document.getElementById(
         'yearInfo'
-    ).innerHTML = year;
+    ).innerHTML =
+        year;
 
 
     document.getElementById(
         'tableYear'
-    ).innerHTML = year;
+    ).innerHTML =
+        year;
 
 
-    // tabel
+    // Update tabel
 
     updateTable(
         year
     );
 
 
-    // raster
+    // Update raster
 
     loadRaster(
         year
     );
 
 
-    // tombol
+    // Update tombol aktif
 
     var buttons =
-        document.querySelectorAll(
-            '.year-button'
-        );
+    document.querySelectorAll(
+        '.year-button'
+    );
 
 
     buttons.forEach(
 
         function(button) {
 
+
             button.classList.remove(
                 'active'
             );
 
+
+            if (
+                button.innerText.trim()
+                ==
+                String(year)
+            ) {
+
+                button.classList.add(
+                    'active'
+                );
+
+            }
+
         }
 
-    );
-
-
-    event.target.classList.add(
-        'active'
     );
 
 }
@@ -1424,14 +1606,14 @@ function changeYear(year) {
 
 
 // =====================================================
-// DROPDOWN
+// DROPDOWN TAHUN
 // =====================================================
 
-document.getElementById(
-
+document
+.getElementById(
     'yearSelect'
-
-).addEventListener(
+)
+.addEventListener(
 
     'change',
 
@@ -1439,15 +1621,14 @@ document.getElementById(
 
 
         var year =
-            parseInt(
-                this.value
-            );
+        parseInt(
+            this.value
+        );
 
 
         changeYear(
             year
         );
-
 
     }
 
@@ -1456,7 +1637,7 @@ document.getElementById(
 
 
 // =====================================================
-// LOAD AWAL
+// LOAD DEFAULT 2021
 // =====================================================
 
 updateTable(
