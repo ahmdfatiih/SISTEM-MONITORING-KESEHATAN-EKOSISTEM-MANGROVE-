@@ -1,556 +1,764 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+  <title>WebGIS Monitoring Kesehatan Ekosistem Mangrove</title>
 
-    <title>WebGIS Monitoring Mangrove 2021</title>
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
 
-    <!-- =====================================================
-         LEAFLET CSS
-         ===================================================== -->
-    <link rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <style>
+  <!-- GeoTIFF -->
+  <script src="https://unpkg.com/georaster"></script>
+  <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: Arial, sans-serif;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        #map {
-            width: 100%;
-            height: 100vh;
-        }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+    }
 
-        /* Judul */
-        .judul {
-            position: absolute;
-            top: 15px;
-            left: 60px;
-            z-index: 1000;
+    /* HEADER */
+    header {
+      height: 70px;
+      background: #003b2b;
+      color: white;
+      padding: 12px 25px;
+    }
 
-            background: white;
-            padding: 12px 18px;
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
 
-            border-radius: 8px;
+    header p {
+      margin: 5px 0 0;
+      font-size: 13px;
+      opacity: 0.9;
+    }
 
-            box-shadow:
-                0 2px 8px rgba(0,0,0,0.3);
+    /* LAYOUT */
+    .container {
+      display: flex;
+      height: calc(100vh - 70px);
+    }
 
-            font-size: 18px;
-            font-weight: bold;
-        }
+    /* SIDEBAR */
+    #sidebar {
+      width: 360px;
+      background: white;
+      overflow-y: auto;
+      padding: 18px;
+      box-shadow: 2px 0 6px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
 
-        /* Status */
-        .status {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1000;
+    #sidebar h2 {
+      margin-top: 0;
+      color: #064b38;
+      font-size: 20px;
+    }
 
-            background: white;
-            padding: 10px 15px;
+    #sidebar h3 {
+      margin-top: 22px;
+      color: #064b38;
+      font-size: 15px;
+      border-bottom: 2px solid #064b38;
+      padding-bottom: 6px;
+    }
 
-            border-radius: 6px;
+    /* TAHUN */
+    .tahun-box {
+      border: 1px solid #ccc;
+      padding: 12px;
+      border-radius: 6px;
+      background: #fafafa;
+    }
 
-            box-shadow:
-                0 2px 8px rgba(0,0,0,0.3);
+    .tahun {
+      background: #006b45;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 5px;
+    }
 
-            font-size: 14px;
-        }
+    /* STATUS */
+    #status {
+      margin-top: 10px;
+      padding: 10px;
+      background: #eef7f2;
+      border-left: 4px solid #006b45;
+      font-size: 13px;
+    }
 
-        /* Legenda */
-        .legend {
-            background: white;
-            padding: 12px;
+    /* LEGEND */
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      font-size: 13px;
+    }
 
-            line-height: 22px;
+    .color-box {
+      width: 30px;
+      height: 20px;
+      margin-right: 10px;
+      border: 1px solid #555;
+    }
 
-            border-radius: 6px;
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
 
-            box-shadow:
-                0 2px 8px rgba(0,0,0,0.3);
-        }
+    th {
+      background: #004d36;
+      color: white;
+      padding: 8px 5px;
+      text-align: center;
+    }
 
-        .legend-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+    td {
+      border: 1px solid #ccc;
+      padding: 7px 5px;
+      text-align: center;
+    }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-        }
+    tr:nth-child(even) {
+      background: #f5f5f5;
+    }
 
-        .legend-color {
-            width: 25px;
-            height: 16px;
-            margin-right: 8px;
-            border: 1px solid #555;
-        }
+    /* MAP */
+    #map {
+      flex: 1;
+      height: 100%;
+    }
 
-    </style>
+    .leaflet-control-layers {
+      font-size: 13px;
+    }
 
+    /* LOADING */
+    #loading {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      z-index: 9999;
+      display: none;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width: 800px) {
+      #sidebar {
+        width: 300px;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+<header>
+  <h1>WebGIS Monitoring Kesehatan Ekosistem Mangrove</h1>
+  <p>Desa Sidodadi, Kabupaten Pesawaran, Lampung</p>
+</header>
 
-<!-- =====================================================
-     JUDUL
-     ===================================================== -->
+<div class="container">
 
-<div class="judul">
-    Monitoring Kesehatan Ekosistem Mangrove - Tahun 2021
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+
+    <h2>Monitoring Mangrove</h2>
+
+    <!-- TAHUN -->
+    <h3>PILIH TAHUN</h3>
+
+    <div class="tahun-box">
+      <div class="tahun">
+        2021
+      </div>
+    </div>
+
+    <div id="status">
+      Memuat raster kesehatan mangrove tahun 2021...
+    </div>
+
+    <!-- LEGENDA -->
+    <h3>KLASIFIKASI KESEHATAN MANGROVE</h3>
+
+    <div class="legend-item">
+      <div class="color-box" style="background:#8B0000;"></div>
+      <span>Sangat Tidak Sehat</span>
+    </div>
+
+    <div class="legend-item">
+      <div class="color-box" style="background:#A65E24;"></div>
+      <span>Tidak Sehat</span>
+    </div>
+
+    <div class="legend-item">
+      <div class="color-box" style="background:#A6A67A;"></div>
+      <span>Sedang</span>
+    </div>
+
+    <div class="legend-item">
+      <div class="color-box" style="background:#4F7F32;"></div>
+      <span>Sehat</span>
+    </div>
+
+    <div class="legend-item">
+      <div class="color-box" style="background:#006B3C;"></div>
+      <span>Sangat Sehat</span>
+    </div>
+
+    <!-- TABEL -->
+    <h3>INDEKS KESEHATAN MANGROVE 2021</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Kelas</th>
+          <th>Luas (ha)</th>
+          <th>%</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Sangat Tidak Sehat</td>
+          <td id="luas1">0.00</td>
+          <td id="persen1">0.00</td>
+        </tr>
+
+        <tr>
+          <td>Tidak Sehat</td>
+          <td id="luas2">0.00</td>
+          <td id="persen2">0.00</td>
+        </tr>
+
+        <tr>
+          <td>Sedang</td>
+          <td id="luas3">0.00</td>
+          <td id="persen3">0.00</td>
+        </tr>
+
+        <tr>
+          <td>Sehat</td>
+          <td id="luas4">0.00</td>
+          <td id="persen4">0.00</td>
+        </tr>
+
+        <tr>
+          <td>Sangat Sehat</td>
+          <td id="luas5">0.00</td>
+          <td id="persen5">0.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Keterangan</h3>
+
+    <p style="font-size:12px; line-height:1.6;">
+      Peta menunjukkan klasifikasi kesehatan ekosistem mangrove
+      berdasarkan nilai indeks yang telah diolah menggunakan data raster.
+    </p>
+
+  </div>
+
+  <!-- MAP -->
+  <div id="map"></div>
+
 </div>
 
-
-<!-- =====================================================
-     PETA
-     ===================================================== -->
-
-<div id="map"></div>
-
-
-<!-- =====================================================
-     STATUS
-     ===================================================== -->
-
-<div class="status" id="status">
-    Memuat raster mangrove 2021...
+<div id="loading">
+  Memuat raster...
 </div>
-
-
-<!-- =====================================================
-     LEAFLET JS
-     ===================================================== -->
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-
-<!-- =====================================================
-     GEORASTER
-     ===================================================== -->
-
-<script src="https://unpkg.com/georaster"></script>
-
-
-<!-- =====================================================
-     GEORASTER LAYER FOR LEAFLET
-     ===================================================== -->
-
-<script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
 
 
 <script>
 
-/* ========================================================
-   1. MEMBUAT PETA
-   ======================================================== */
+  // =====================================================
+  // 1. MEMBUAT PETA
+  // =====================================================
 
-const map = L.map("map").setView(
-    [-5.48, 105.25],
-    10
-);
+  const map = L.map('map').setView(
+    [-5.50, 105.25],
+    12
+  );
 
 
-/* ========================================================
-   2. BASEMAP ESRI SATELLITE
-   ======================================================== */
+  // =====================================================
+  // 2. BASEMAP IMAGERY
+  // =====================================================
 
-const satellite = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/" +
-    "World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  const imagery = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/' +
+    'World_Imagery/MapServer/tile/{z}/{y}/{x}',
     {
-        attribution:
-            "Tiles © Esri"
+      attribution:
+        'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics',
+      maxZoom: 19
     }
-);
-
-satellite.addTo(map);
+  ).addTo(map);
 
 
-/* ========================================================
-   3. URL RASTER
-   ======================================================== */
-
-/*
-   Repository:
-
-   https://ahmdfatih.github.io/
-   SISTEM-MONITORING-KESEHATAN-EKOSISTEM-MANGROVE/
-
-   File:
-
-   DATA/mangrove_2021.tif
-*/
-
-const rasterURL =
-    "https://ahmdfatih.github.io/" +
-    "SISTEM-MONITORING-KESEHATAN-EKOSISTEM-MANGROVE/" +
-    "DATA/mangrove_2021.tif";
+  // Basemap tambahan
+  const streets = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; OpenStreetMap contributors'
+    }
+  );
 
 
-/* ========================================================
-   4. WARNA KELAS MANGROVE
-   ======================================================== */
+  // =====================================================
+  // 3. URL RASTER
+  // =====================================================
 
-const warnaKelas = {
-
-    // Kelas 1
-    1: "#8B0000",
-
-    // Kelas 2
-    2: "#A66A2C",
-
-    // Kelas 3
-    3: "#8F8F5A",
-
-    // Kelas 4
-    4: "#4F8F2F",
-
-    // Kelas 5
-    5: "#006B35"
-};
+  const rasterURL =
+    'DATA/mangrove_2021.tif';
 
 
-/* ========================================================
-   5. NAMA KELAS
-   ======================================================== */
+  // =====================================================
+  // 4. WARNA KLASIFIKASI
+  // =====================================================
 
-const namaKelas = {
+  function getColor(value) {
 
-    1: "Sangat Tidak Sehat",
+    if (value === null || value === undefined || isNaN(value)) {
+      return null;
+    }
 
-    2: "Tidak Sehat",
+    /*
+      KELAS RASTER
 
-    3: "Sedang",
+      1 = Sangat Tidak Sehat
+      2 = Tidak Sehat
+      3 = Sedang
+      4 = Sehat
+      5 = Sangat Sehat
+    */
 
-    4: "Sehat",
+    if (value === 1) return '#8B0000';
 
-    5: "Sangat Sehat"
-};
+    if (value === 2) return '#A65E24';
+
+    if (value === 3) return '#A6A67A';
+
+    if (value === 4) return '#4F7F32';
+
+    if (value === 5) return '#006B3C';
+
+    return null;
+  }
 
 
-/* ========================================================
-   6. MEMUAT RASTER
-   ======================================================== */
+  // =====================================================
+  // 5. LOAD GEOTIFF
+  // =====================================================
 
-async function loadRaster() {
+  async function loadRaster() {
+
+    const loading =
+      document.getElementById('loading');
 
     const status =
-        document.getElementById("status");
+      document.getElementById('status');
+
+    loading.style.display = 'block';
+
+    status.innerHTML =
+      'Sedang memuat raster mangrove tahun 2021...';
 
 
     try {
 
-        status.innerHTML =
-            "Mengunduh raster mangrove 2021...";
+      const response =
+        await fetch(rasterURL);
+
+      if (!response.ok) {
+
+        throw new Error(
+          'File tidak ditemukan: ' + rasterURL
+        );
+
+      }
 
 
-        console.log(
-            "Memuat:",
-            rasterURL
+      const arrayBuffer =
+        await response.arrayBuffer();
+
+
+      const georaster =
+        await parseGeoraster(arrayBuffer);
+
+
+      console.log('GeoRaster:', georaster);
+
+
+      // =================================================
+      // 6. MENAMPILKAN RASTER
+      // =================================================
+
+      const rasterLayer =
+        new GeoRasterLayer({
+
+          georaster: georaster,
+
+          opacity: 0.75,
+
+          resolution: 256,
+
+          pixelValuesToColorFn:
+            function(pixelValues) {
+
+              const value =
+                pixelValues[0];
+
+              return getColor(value);
+
+            }
+
+        });
+
+
+      rasterLayer.addTo(map);
+
+
+      // Zoom ke raster
+      map.fitBounds(
+        rasterLayer.getBounds()
+      );
+
+
+      // =================================================
+      // 7. HITUNG LUAS KELAS
+      // =================================================
+
+      hitungLuas(
+        georaster
+      );
+
+
+      status.innerHTML =
+        'Raster kesehatan mangrove tahun 2021 berhasil dimuat.';
+
+
+      loading.style.display =
+        'none';
+
+
+      // =================================================
+      // 8. POPUP NILAI RASTER
+      // =================================================
+
+      rasterLayer.on(
+        'click',
+        function(e) {
+
+          const value =
+            rasterLayer.getValueAtLatLng(
+              e.latlng.lat,
+              e.latlng.lng
+            );
+
+          if (
+            value !== undefined &&
+            value !== null
+          ) {
+
+            let namaKelas =
+              '';
+
+            if (value == 1)
+              namaKelas =
+                'Sangat Tidak Sehat';
+
+            else if (value == 2)
+              namaKelas =
+                'Tidak Sehat';
+
+            else if (value == 3)
+              namaKelas =
+                'Sedang';
+
+            else if (value == 4)
+              namaKelas =
+                'Sehat';
+
+            else if (value == 5)
+              namaKelas =
+                'Sangat Sehat';
+
+            else
+              namaKelas =
+                'Tidak diketahui';
+
+
+            L.popup()
+
+              .setLatLng(e.latlng)
+
+              .setContent(
+                '<b>Indeks Kesehatan Mangrove</b>' +
+                '<br>' +
+                'Tahun: 2021' +
+                '<br>' +
+                'Nilai: ' + value +
+                '<br>' +
+                'Kelas: ' + namaKelas
+              )
+
+              .openOn(map);
+
+          }
+
+        }
+      );
+
+
+    }
+
+    catch(error) {
+
+      console.error(error);
+
+      status.innerHTML =
+        '<span style="color:red;">' +
+        'Raster tahun 2021 gagal dimuat.' +
+        '<br><br>' +
+        'Pastikan file berada di:' +
+        '<br><b>DATA/mangrove_2021.tif</b>' +
+        '</span>';
+
+
+      loading.style.display =
+        'none';
+
+      alert(
+        'Raster tahun 2021 gagal dimuat.\\n\\n' +
+        'Pastikan nama file dan folder benar:\\n' +
+        'DATA/mangrove_2021.tif'
+      );
+
+    }
+
+  }
+
+
+  // =====================================================
+  // 9. HITUNG LUAS PER KELAS
+  // =====================================================
+
+  function hitungLuas(georaster) {
+
+    try {
+
+      const data =
+        georaster.values[0];
+
+
+      let jumlah = {
+
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0
+
+      };
+
+
+      // Hitung jumlah piksel
+      for (
+        let y = 0;
+        y < data.length;
+        y++
+      ) {
+
+        for (
+          let x = 0;
+          x < data[y].length;
+          x++
+        ) {
+
+          const value =
+            data[y][x];
+
+
+          if (
+            value >= 1 &&
+            value <= 5
+          ) {
+
+            jumlah[value]++;
+
+          }
+
+        }
+
+      }
+
+
+      // Luas pixel
+      let pixelWidth =
+        Math.abs(
+          georaster.pixelWidth
+        );
+
+      let pixelHeight =
+        Math.abs(
+          georaster.pixelHeight
         );
 
 
-        /* =================================================
-           DOWNLOAD FILE TIFF
-           ================================================= */
+      /*
+        Jika raster menggunakan koordinat
+        geografis (derajat), perhitungan luas
+        di sini merupakan pendekatan.
 
-        const response =
-            await fetch(rasterURL);
+        Untuk hasil luas yang benar-benar akurat,
+        sebaiknya raster sudah menggunakan
+        sistem proyeksi meter.
+      */
 
 
-        if (!response.ok) {
+      let pixelArea =
+        pixelWidth *
+        pixelHeight;
 
-            throw new Error(
-                "File tidak ditemukan. HTTP " +
-                response.status
-            );
+
+      /*
+        Jika pixelArea masih dalam derajat,
+        jangan langsung dianggap m².
+        Untuk sementara tabel akan
+        menghitung proporsi (%) berdasarkan
+        jumlah piksel.
+      */
+
+
+      const total =
+        jumlah[1] +
+        jumlah[2] +
+        jumlah[3] +
+        jumlah[4] +
+        jumlah[5];
+
+
+      for (
+        let kelas = 1;
+        kelas <= 5;
+        kelas++
+      ) {
+
+        let persen = 0;
+
+        if (total > 0) {
+
+          persen =
+            (jumlah[kelas] /
+            total) * 100;
 
         }
 
 
-        /* =================================================
-           BACA DATA TIFF
-           ================================================= */
-
-        const arrayBuffer =
-            await response.arrayBuffer();
-
-
-        status.innerHTML =
-            "Membaca raster mangrove 2021...";
-
-
-        /* =================================================
-           PARSE GEOTIFF
-           ================================================= */
-
-        const georaster =
-            await parseGeoraster(
-                arrayBuffer
-            );
-
-
-        console.log(
-            "GeoRaster:",
-            georaster
-        );
-
-
-        /* =================================================
-           TAMPILKAN RASTER
-           ================================================= */
-
-        const rasterLayer =
-            new GeoRasterLayer({
-
-                georaster: georaster,
-
-                opacity: 0.75,
-
-                resolution: 256,
-
-
-                /*
-                 * MENGUBAH NILAI PIXEL
-                 * MENJADI WARNA
-                 */
-
-                pixelValuesToColorFn:
-                    function(pixelValues) {
-
-                        const value =
-                            pixelValues[0];
-
-
-                        /*
-                         * NoData
-                         */
-
-                        if (
-                            value === null ||
-                            value === undefined ||
-                            isNaN(value)
-                        ) {
-
-                            return null;
-
-                        }
-
-
-                        /*
-                         * Bulatkan nilai
-                         */
-
-                        const kelas =
-                            Math.round(value);
-
-
-                        /*
-                         * Ambil warna
-                         */
-
-                        if (
-                            warnaKelas[kelas]
-                        ) {
-
-                            return warnaKelas[
-                                kelas
-                            ];
-
-                        }
-
-
-                        /*
-                         * Nilai selain 1-5
-                         */
-
-                        return null;
-
-                    }
-
-            });
-
-
-        /* =================================================
-           TAMBAHKAN KE PETA
-           ================================================= */
-
-        rasterLayer.addTo(map);
-
-
-        /* =================================================
-           ZOOM KE RASTER
-           ================================================= */
-
-        rasterLayer.once(
-            "load",
-            function() {
-
-                if (
-                    rasterLayer.getBounds()
-                ) {
-
-                    map.fitBounds(
-                        rasterLayer.getBounds()
-                    );
-
-                }
-
-            }
-        );
+        document.getElementById(
+          'persen' + kelas
+        ).innerHTML =
+          persen.toFixed(2);
 
 
         /*
-         * Alternatif zoom jika event
-         * load tidak tersedia
-         */
+          Sementara luas menggunakan
+          jumlah piksel.
 
-        setTimeout(
-            function() {
+          Nanti bisa kita sesuaikan dengan
+          resolusi raster Anda supaya menjadi
+          hektare yang benar.
+        */
 
-                if (
-                    rasterLayer.getBounds()
-                ) {
+        document.getElementById(
+          'luas' + kelas
+        ).innerHTML =
+          jumlah[kelas];
 
-                    map.fitBounds(
-                        rasterLayer.getBounds()
-                    );
-
-                }
-
-            },
-            1500
-        );
+      }
 
 
-        /* =================================================
-           STATUS BERHASIL
-           ================================================= */
+      console.log(
+        'Jumlah piksel:',
+        jumlah
+      );
 
-        status.innerHTML =
-            "✓ Raster mangrove tahun 2021 berhasil dimuat";
-
-
-        console.log(
-            "Raster 2021 berhasil ditampilkan."
-        );
+      console.log(
+        'Total piksel:',
+        total
+      );
 
 
     }
 
+    catch(error) {
 
-    catch (error) {
-
-
-        /* =================================================
-           JIKA ERROR
-           ================================================= */
-
-        console.error(
-            "ERROR RASTER:",
-            error
-        );
-
-
-        status.innerHTML =
-            "✗ Raster 2021 gagal dimuat";
-
-
-        alert(
-            "Raster tahun 2021 gagal dimuat.\n\n" +
-
-            "File yang dicari:\n" +
-
-            rasterURL +
-
-            "\n\n" +
-
-            "Pastikan file tersebut ada di folder DATA " +
-            "GitHub dan namanya persis:\n\n" +
-
-            "mangrove_2021.tif"
-        );
+      console.error(
+        'Gagal menghitung luas:',
+        error
+      );
 
     }
 
-}
+  }
 
 
-/* ========================================================
-   7. LEGENDA
-   ======================================================== */
+  // =====================================================
+  // 10. CONTROL BASEMAP
+  // =====================================================
 
-const legend =
-    L.control({
-        position: "bottomright"
-    });
+  const baseMaps = {
 
+    "Esri World Imagery":
+      imagery,
 
-legend.onAdd =
-    function() {
+    "OpenStreetMap":
+      streets
 
-        const div =
-            L.DomUtil.create(
-                "div",
-                "legend"
-            );
+  };
 
 
-        div.innerHTML =
-            "<div class='legend-title'>" +
-            "Kesehatan Mangrove 2021" +
-            "</div>";
+  L.control.layers(
+    baseMaps,
+    null,
+    {
+      position: 'topright'
+    }
+  ).addTo(map);
 
 
-        for (
-            let kelas = 1;
-            kelas <= 5;
-            kelas++
-        ) {
+  // =====================================================
+  // 11. JALANKAN
+  // =====================================================
 
-            div.innerHTML +=
-
-                "<div class='legend-item'>" +
-
-                "<div class='legend-color' " +
-
-                "style='background:" +
-                warnaKelas[kelas] +
-                "'></div>" +
-
-                namaKelas[kelas] +
-
-                "</div>";
-
-        }
-
-
-        return div;
-
-    };
-
-
-legend.addTo(map);
-
-
-/* ========================================================
-   8. JALANKAN RASTER
-   ======================================================== */
-
-loadRaster();
+  loadRaster();
 
 </script>
 
