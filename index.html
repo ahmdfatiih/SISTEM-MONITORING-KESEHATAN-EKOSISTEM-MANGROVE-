@@ -1,1197 +1,480 @@
+
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>WebGIS Kesehatan Ekosistem Mangrove</title>
-
-
-<!-- =====================================================
-     LEAFLET
-===================================================== -->
-
-<link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-
-
-<!-- =====================================================
-     GEORASTER
-===================================================== -->
-
-<script
-src="https://unpkg.com/georaster@1.7.2/dist/georaster.browser.min.js">
-</script>
-
-<script
-src="https://unpkg.com/georaster-layer-for-leaflet@4.1.0/dist/georaster-layer-for-leaflet.min.js">
-</script>
-
-
-<!-- =====================================================
-     STYLE
-===================================================== -->
-
-<style>
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f6f5;
-    color: #222;
-}
-
-
-/* =====================================================
-   HEADER
-===================================================== */
-
-.header {
-    height: 78px;
-    background: linear-gradient(
-        135deg,
-        #12372a,
-        #1d5b43
-    );
-    color: white;
-    display: flex;
-    align-items: center;
-    padding: 0 25px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 700;
-}
-
-.header p {
-    margin: 5px 0 0;
-    font-size: 13px;
-    opacity: 0.9;
-}
-
-
-/* =====================================================
-   LAYOUT
-===================================================== */
-
-.main {
-    display: flex;
-    height: calc(100vh - 78px);
-}
-
-
-/* =====================================================
-   SIDEBAR
-===================================================== */
-
-.sidebar {
-    width: 300px;
-    background: white;
-    padding: 20px;
-    overflow-y: auto;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.15);
-    z-index: 1000;
-}
-
-.sidebar h2 {
-    margin-top: 0;
-    font-size: 19px;
-}
-
-.sidebar h3 {
-    font-size: 15px;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
-.sidebar hr {
-    border: none;
-    border-top: 1px solid #ddd;
-    margin: 18px 0;
-}
-
-
-/* =====================================================
-   SELECT TAHUN
-===================================================== */
-
-.year-label {
-    font-size: 13px;
-    font-weight: bold;
-}
-
-#yearSelect {
-    width: 100%;
-    padding: 10px;
-    margin-top: 7px;
-    border: 1px solid #aaa;
-    border-radius: 6px;
-    background: white;
-    font-size: 15px;
-    cursor: pointer;
-}
-
-
-/* =====================================================
-   BUTTON TAHUN
-===================================================== */
-
-.year-buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-top: 10px;
-}
-
-.year-button {
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    background: #e7ece9;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.year-button:hover {
-    background: #cddbd4;
-}
-
-.year-button.active {
-    background: #1d5b43;
-    color: white;
-}
-
-
-/* =====================================================
-   INFO
-===================================================== */
-
-.info-box {
-    background: #eef5f1;
-    border-left: 4px solid #1d5b43;
-    padding: 12px;
-    border-radius: 5px;
-    font-size: 13px;
-    line-height: 1.7;
-}
-
-
-/* =====================================================
-   LEGEND
-===================================================== */
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    margin: 9px 0;
-    font-size: 13px;
-}
-
-.legend-color {
-    width: 25px;
-    height: 18px;
-    margin-right: 9px;
-    border: 1px solid #777;
-}
-
-
-/* =====================================================
-   WARNA KELAS KESEHATAN
-===================================================== */
-
-.class-1 {
-    background: #d7191c;
-}
-
-.class-2 {
-    background: #fdae61;
-}
-
-.class-3 {
-    background: #ffffbf;
-}
-
-.class-4 {
-    background: #a6d96a;
-}
-
-.class-5 {
-    background: #1a9641;
-}
-
-
-/* =====================================================
-   MAP
-===================================================== */
-
-#map {
-    flex: 1;
-    height: 100%;
-}
-
-
-/* =====================================================
-   TABLE
-===================================================== */
-
-.table-section {
-    position: absolute;
-    bottom: 15px;
-    right: 20px;
-    width: 500px;
-    max-height: 270px;
-    overflow-y: auto;
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.25);
-    z-index: 900;
-}
-
-.table-section h3 {
-    margin-top: 0;
-    font-size: 16px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-}
-
-th {
-    background: #1d5b43;
-    color: white;
-    padding: 8px;
-}
-
-td {
-    padding: 7px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-}
-
-tr:hover {
-    background: #f2f5f3;
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width:800px) {
-
-    .main {
-        flex-direction: column;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebGIS Kesehatan Ekosistem Mangrove</title>
+
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #18352d;
+      background: #f3f7f4;
     }
-
-    .sidebar {
-        width: 100%;
-        height: auto;
+    header {
+      background: #145c43;
+      color: white;
+      padding: 20px;
     }
-
+    header h1 { margin: 0 0 8px; font-size: 24px; }
+    header p { margin: 0; line-height: 1.5; }
+    main { max-width: 1400px; margin: auto; padding: 16px; }
+    .panel {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 10px #0000000c;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    select, button {
+      padding: 10px 14px;
+      border-radius: 7px;
+      border: 1px solid #b9cbc1;
+      font-size: 15px;
+    }
+    button {
+      cursor: pointer;
+      color: white;
+      background: #16744f;
+      border: 0;
+    }
+    button:hover { background: #105a3d; }
     #map {
-        height: 550px;
+      height: 65vh;
+      min-height: 380px;
+      border-radius: 10px;
+      background: #e2ebe5;
     }
-
-    .table-section {
-        position: relative;
-        bottom: auto;
-        right: auto;
-        width: 100%;
+    .status {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 7px;
+      background: #eef5f0;
+      overflow-wrap: anywhere;
     }
-
-}
-
-</style>
-
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .stat {
+      padding: 15px;
+      background: #f0f7f2;
+      border-radius: 9px;
+      min-width: 0;
+    }
+    .stat small { color: #4d6a5b; }
+    .stat strong {
+      display: block;
+      font-size: 21px;
+      margin-top: 8px;
+      overflow-wrap: anywhere;
+    }
+    .table-wrap { overflow-x: auto; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #dce6df;
+      padding: 10px;
+      text-align: left;
+      white-space: nowrap;
+    }
+    th { background: #e8f2eb; }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+    .dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      margin-right: 5px;
+    }
+    footer { padding: 20px; text-align: center; color: #60776b; }
+    @media(max-width: 700px) {
+      header h1 { font-size: 20px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #map { height: 55vh; min-height: 340px; }
+    }
+  </style>
 </head>
 
-
 <body>
+<header>
+  <h1>WebGIS Monitoring Kesehatan Ekosistem Mangrove</h1>
+  <p>Desa Sidodadi, Kabupaten Pesawaran, Provinsi Lampung</p>
+  <p>Monitoring tahunan 2021–2026</p>
+</header>
 
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
-<div class="header">
-
-    <div>
-
-        <h1>
-            WEBGIS EKOSISTEM MANGROVE
-        </h1>
-
-        <p>
-            Desa Sidodadi, Kabupaten Pesawaran |
-            Monitoring Kesehatan Mangrove 2021–2026
-        </p>
-
+<main>
+  <section class="panel">
+    <h2>Pilih Tahun Pengamatan</h2>
+    <div class="controls">
+      <label for="yearSelect">Tahun:</label>
+      <select id="yearSelect">
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
+        <option value="2024">2024</option>
+        <option value="2025">2025</option>
+        <option value="2026">2026</option>
+      </select>
+      <button id="reloadBtn" type="button">Muat Ulang Raster</button>
     </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
-
-<div class="main">
-
-
-<!-- =====================================================
-     SIDEBAR
-===================================================== -->
-
-<div class="sidebar">
-
-<h2>
-    Kontrol Peta
-</h2>
-
-
-<!-- =====================================================
-     PILIH TAHUN
-===================================================== -->
-
-<div class="year-label">
-    Pilih Tahun
-</div>
-
-<select id="yearSelect">
-
-    <option value="2021">2021</option>
-    <option value="2022">2022</option>
-    <option value="2023">2023</option>
-    <option value="2024">2024</option>
-    <option value="2025">2025</option>
-    <option value="2026">2026</option>
-
-</select>
-
-
-<!-- =====================================================
-     BUTTON TAHUN
-===================================================== -->
-
-<div class="year-buttons">
-
-<button
-class="year-button active"
-onclick="changeYear(2021)">
-2021
-</button>
-
-<button
-class="year-button"
-onclick="changeYear(2022)">
-2022
-</button>
-
-<button
-class="year-button"
-onclick="changeYear(2023)">
-2023
-</button>
-
-<button
-class="year-button"
-onclick="changeYear(2024)">
-2024
-</button>
-
-<button
-class="year-button"
-onclick="changeYear(2025)">
-2025
-</button>
-
-<button
-class="year-button"
-onclick="changeYear(2026)">
-2026
-</button>
-
-</div>
-
-
-<hr>
-
-
-<!-- =====================================================
-     INFORMASI WILAYAH
-===================================================== -->
-
-<h3>
-    Informasi Wilayah
-</h3>
-
-<div class="info-box">
-
-<b>Tahun:</b>
-<span id="yearInfo">2021</span>
-
-<br>
-
-<b>Desa:</b>
-Sidodadi
-
-<br>
-
-<b>Kabupaten:</b>
-Pesawaran
-
-<br>
-
-<b>Provinsi:</b>
-Lampung
-
-<br>
-
-<b>Data:</b>
-Sentinel-2
-
-</div>
-
-
-<hr>
-
-
-<!-- =====================================================
-     LEGENDA
-===================================================== -->
-
-<h3>
-    Kelas Kesehatan Mangrove
-</h3>
-
-<div class="legend-item">
-
-<span class="legend-color class-1"></span>
-
-Sangat Tidak Sehat
-
-</div>
-
-
-<div class="legend-item">
-
-<span class="legend-color class-2"></span>
-
-Tidak Sehat
-
-</div>
-
-
-<div class="legend-item">
-
-<span class="legend-color class-3"></span>
-
-Sedang
-
-</div>
-
-
-<div class="legend-item">
-
-<span class="legend-color class-4"></span>
-
-Sehat
-
-</div>
-
-
-<div class="legend-item">
-
-<span class="legend-color class-5"></span>
-
-Sangat Sehat
-
-</div>
-
-
-<hr>
-
-
-<p style="font-size:13px; line-height:1.6;">
-
-Raster menampilkan kelas kesehatan
-ekosistem mangrove berdasarkan
-hasil analisis indeks NDVI, NDMI,
-dan MNDWI.
-
-</p>
-
-</div>
-
-
-
-<!-- =====================================================
-     MAP
-===================================================== -->
-
-<div id="map"></div>
-
-</div>
-
-
-
-<!-- =====================================================
-     TABLE
-===================================================== -->
-
-<div class="table-section">
-
-<h3>
-
-Tabel Indeks Kesehatan Mangrove
-
-<span id="tableYear">
-2021
-</span>
-
-</h3>
-
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>
-Kelas Kesehatan
-</th>
-
-<th>
-Luas (Ha)
-</th>
-
-<th>
-Persentase (%)
-</th>
-
-</tr>
-
-</thead>
-
-
-<tbody id="healthTable">
-
-</tbody>
-
-</table>
-
-</div>
-
-
-
-<!-- =====================================================
-     LEAFLET
-===================================================== -->
-
-<script
-src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
-
+    <div id="status" class="status" role="status">
+      Menyiapkan peta...
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Peta Sebaran Mangrove <span id="activeYear">2021</span></h2>
+    <div id="map"></div>
+    <div class="legend">
+      <span><i class="dot" style="background:#d73027"></i>Nilai rendah</span>
+      <span><i class="dot" style="background:#fee08b"></i>Nilai sedang</span>
+      <span><i class="dot" style="background:#1a9850"></i>Nilai tinggi</span>
+    </div>
+    <p style="font-size:13px;color:#60776b">
+      Warna pada legenda merupakan gradasi visual nilai raster,
+      bukan batas kelas kesehatan resmi.
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>Ringkasan Data <span id="summaryYear">2021</span></h2>
+    <div class="stats">
+      <div class="stat"><small>Luas</small><strong id="luas">—</strong></div>
+      <div class="stat"><small>NDVI</small><strong id="ndvi">—</strong></div>
+      <div class="stat"><small>NDMI</small><strong id="ndmi">—</strong></div>
+      <div class="stat"><small>MNDWI</small><strong id="mndwi">—</strong></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Tabel Data Excel</h2>
+    <p id="excelStatus">Membaca data Excel...</p>
+    <div class="table-wrap">
+      <table>
+        <thead id="tableHead"></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer>
+  WebGIS Monitoring Kesehatan Ekosistem Mangrove · 2021–2026
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/georaster"></script>
+<script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+<script src="https://cdn.jsdelivr.net/npm/geotiff@2.1.3/dist-browser/geotiff.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <script>
-
-
-// =====================================================
-// INISIALISASI PETA
-// =====================================================
-
-var map = L.map('map').setView(
-    [-5.54, 105.24],
-    13
-);
-
+"use strict";
 
 // =====================================================
-// BASEMAP ESRI SATELLITE
+// KONFIGURASI FILE: sesuaikan dengan nama file GitHub
 // =====================================================
+const DATA_FOLDER = "./DATA/";
+const EXCEL_FILE = DATA_FOLDER + "NILAI%20INDEKS%20KEMKER%20(1).xlsx";
 
-var imagery = L.tileLayer(
+const YEARS = [2021, 2022, 2023, 2024, 2025, 2026];
 
-'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+// Peta awal: sekitar wilayah Pesawaran.
+// Batas tampilan akan diarahkan ke raster setelah berhasil dibaca.
+const map = L.map("map").setView([-5.60, 105.25], 12);
 
-{
-    attribution: 'Tiles © Esri'
-}
-
+L.tileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  {
+    attribution: "Tiles © Esri",
+    maxZoom: 19
+  }
 ).addTo(map);
 
+let rasterLayer = null;
+let currentRequest = 0;
+let excelRows = [];
+let excelHeaders = [];
+let excelReady = false;
 
-// =====================================================
-// OPEN STREET MAP
-// =====================================================
+const $ = id => document.getElementById(id);
 
-var osm = L.tileLayer(
-
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-
-{
-    attribution: '© OpenStreetMap contributors'
+function setStatus(message) {
+  $("status").textContent = message;
 }
 
-);
-
-
-// =====================================================
-// BASEMAP CONTROL
-// =====================================================
-
-L.control.layers(
-
-{
-    "Satellite / Imagery": imagery,
-    "OpenStreetMap": osm
+function formatValue(value) {
+  if (value === null || value === undefined || value === "") return "—";
+  if (typeof value === "number") {
+    return value.toLocaleString("id-ID", { maximumFractionDigits: 4 });
+  }
+  return String(value);
 }
 
-).addTo(map);
-
-
-// =====================================================
-// LOKASI FILE RASTER
-//
-// PENTING:
-// FOLDER GITHUB ANDA BERNAMA DATA
-// =====================================================
-
-var rasterFiles = {
-
-    2021: 'DATA/mangrove_2021.tif',
-
-    2022: 'DATA/mangrove_2022.tif',
-
-    2023: 'DATA/mangrove_2023.tif',
-
-    2024: 'DATA/mangrove_2024.tif',
-
-    2025: 'DATA/mangrove_2025.tif',
-
-    2026: 'DATA/mangrove_2026.tif'
-
-};
-
-
-// =====================================================
-// RASTER AKTIF
-// =====================================================
-
-var currentRaster = null;
-
-
-// =====================================================
-// WARNA KELAS
-// =====================================================
-
-function getColor(value) {
-
-    if (
-        value === null ||
-        value === undefined ||
-        isNaN(value)
-    ) {
-
-        return null;
-
-    }
-
-
-    // Kelas 1
-    if (value >= 1 && value < 2) {
-
-        return '#d7191c';
-
-    }
-
-
-    // Kelas 2
-    if (value >= 2 && value < 3) {
-
-        return '#fdae61';
-
-    }
-
-
-    // Kelas 3
-    if (value >= 3 && value < 4) {
-
-        return '#ffffbf';
-
-    }
-
-
-    // Kelas 4
-    if (value >= 4 && value < 5) {
-
-        return '#a6d96a';
-
-    }
-
-
-    // Kelas 5
-    if (value >= 5 && value <= 5) {
-
-        return '#1a9641';
-
-    }
-
-
-    return null;
-
+function normalize(text) {
+  return String(text ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
 }
 
+// Mencari kolom yang namanya mengandung istilah terkait.
+function findColumn(headers, candidates) {
+  return headers.find(h => {
+    const key = normalize(h);
+    return candidates.some(c => key.includes(normalize(c)));
+  });
+}
 
-// =====================================================
-// MEMUAT RASTER
-// =====================================================
+function findYearColumn(headers) {
+  return findColumn(headers, ["tahun", "year"]);
+}
+
+function updateSummary(year) {
+  $("summaryYear").textContent = year;
+
+  if (!excelReady) return;
+
+  const yearCol = findYearColumn(excelHeaders);
+  let row = null;
+
+  if (yearCol) {
+    row = excelRows.find(r =>
+      String(r[yearCol] ?? "").trim().slice(0, 4) === String(year)
+    );
+  } else if (excelRows.length === YEARS.length) {
+    row = excelRows[YEARS.indexOf(Number(year))];
+  }
+
+  if (!row) {
+    $("luas").textContent = "—";
+    $("ndvi").textContent = "—";
+    $("ndmi").textContent = "—";
+    $("mndwi").textContent = "—";
+    return;
+  }
+
+  const luasCol = findColumn(excelHeaders, ["luas"]);
+  const ndviCol = findColumn(excelHeaders, ["ndvi"]);
+  const ndmiCol = findColumn(excelHeaders, ["ndmi"]);
+  const mndwiCol = findColumn(excelHeaders, ["mndwi"]);
+
+  $("luas").textContent = luasCol ? formatValue(row[luasCol]) : "—";
+  $("ndvi").textContent = ndviCol ? formatValue(row[ndviCol]) : "—";
+  $("ndmi").textContent = ndmiCol ? formatValue(row[ndmiCol]) : "—";
+  $("mndwi").textContent = mndwiCol ? formatValue(row[mndwiCol]) : "—";
+}
+
+function renderTable(year) {
+  const head = $("tableHead");
+  const body = $("tableBody");
+  head.replaceChildren();
+  body.replaceChildren();
+
+  if (!excelReady) return;
+
+  const yearCol = findYearColumn(excelHeaders);
+  let rows = excelRows;
+
+  if (yearCol) {
+    rows = rows.filter(r =>
+      String(r[yearCol] ?? "").trim().slice(0, 4) === String(year)
+    );
+  } else if (excelRows.length === YEARS.length) {
+    rows = [excelRows[YEARS.indexOf(Number(year))]];
+  }
+
+  const trHead = document.createElement("tr");
+  excelHeaders.forEach(h => {
+    const th = document.createElement("th");
+    th.textContent = h;
+    trHead.appendChild(th);
+  });
+  head.appendChild(trHead);
+
+  if (!rows.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = excelHeaders.length || 1;
+    td.textContent = "Tidak ditemukan baris data untuk tahun " + year +
+      ". Periksa kolom Tahun di Excel.";
+    tr.appendChild(td);
+    body.appendChild(tr);
+    return;
+  }
+
+  rows.forEach(row => {
+    const tr = document.createElement("tr");
+    excelHeaders.forEach(h => {
+      const td = document.createElement("td");
+      td.textContent = formatValue(row[h]);
+      tr.appendChild(td);
+    });
+    body.appendChild(tr);
+  });
+}
+
+async function loadExcel() {
+  try {
+    $("excelStatus").textContent = "Memuat file Excel...";
+
+    const response = await fetch(EXCEL_FILE + "?v=" + Date.now());
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status + " saat membaca Excel");
+    }
+
+    const buffer = await response.arrayBuffer();
+    const workbook = XLSX.read(buffer, { type: "array" });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+    const data = XLSX.utils.sheet_to_json(sheet, {
+      defval: "",
+      raw: true
+    });
+
+    if (!data.length) {
+      throw new Error("Sheet pertama kosong atau tidak memiliki baris data.");
+    }
+
+    excelHeaders = Object.keys(data[0]);
+    excelRows = data;
+    excelReady = true;
+
+    $("excelStatus").textContent =
+      "Excel berhasil dibaca: " + workbook.SheetNames[0] +
+      " · " + excelRows.length + " baris data.";
+
+    updateSummary(Number($("yearSelect").value));
+    renderTable(Number($("yearSelect").value));
+  } catch (error) {
+    console.error(error);
+    $("excelStatus").textContent =
+      "Excel gagal dimuat. Pastikan nama file dan lokasi DATA benar. " +
+      error.message;
+  }
+}
 
 async function loadRaster(year) {
+  const requestId = ++currentRequest;
+  $("activeYear").textContent = year;
+  setStatus("Memuat raster tahun " + year + "...");
 
+  const rasterURL = DATA_FOLDER + "mangrove_" + year + ".tif?v=" + Date.now();
 
-    // Hapus raster sebelumnya
+  try {
+    // Mengambil file TIFF sesuai tahun yang dipilih.
+    const response = await fetch(rasterURL, { cache: "no-store" });
 
-    if (currentRaster) {
-
-        map.removeLayer(currentRaster);
-
-        currentRaster = null;
-
+    if (!response.ok) {
+      throw new Error(
+        "File tidak ditemukan atau gagal diakses (HTTP " +
+        response.status + "). Periksa DATA/mangrove_" + year + ".tif"
+      );
     }
 
+    const arrayBuffer = await response.arrayBuffer();
 
-    try {
+    if (requestId !== currentRequest) return;
 
+    // Parse TIFF menjadi GeoRaster.
+    const georaster = await parseGeoraster(arrayBuffer);
 
-        console.log(
-            'Memuat raster tahun:',
-            year
-        );
+    if (requestId !== currentRequest) return;
 
+    const newLayer = new GeoRasterLayer({
+      georaster: georaster,
+      opacity: 0.78,
+      resolution: 256,
+      pixelValuesToColorFn: values => {
+        const value = values && values[0];
 
-        console.log(
-            'Lokasi:',
-            rasterFiles[year]
-        );
+        if (value === null || value === undefined ||
+            !Number.isFinite(Number(value))) return null;
 
+        // Gradasi otomatis berdasarkan rentang nilai raster.
+        const min = Number(georaster.mins[0]);
+        const max = Number(georaster.maxs[0]);
+        const range = max - min;
+        const t = range === 0 ? 0.5 :
+          Math.max(0, Math.min(1, (Number(value) - min) / range));
 
-        // =================================================
-        // FETCH FILE TIFF
-        // =================================================
-
-        var response = await fetch(
-            rasterFiles[year]
-        );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                'File TIFF tidak ditemukan. HTTP ' +
-                response.status
-            );
-
+        // Merah -> kuning -> hijau.
+        let r, g, b;
+        if (t < 0.5) {
+          const u = t * 2;
+          r = 215 + (254 - 215) * u;
+          g = 48 + (224 - 48) * u;
+          b = 39 + (139 - 39) * u;
+        } else {
+          const u = (t - 0.5) * 2;
+          r = 254 + (26 - 254) * u;
+          g = 224 + (152 - 224) * u;
+          b = 139 + (80 - 139) * u;
         }
+        return `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
+      }
+    });
 
+    // Hanya mengganti layer setelah raster baru berhasil diproses.
+    if (rasterLayer) map.removeLayer(rasterLayer);
+    rasterLayer = newLayer;
+    rasterLayer.addTo(map);
 
-        // =================================================
-        // BACA FILE
-        // =================================================
-
-        var arrayBuffer =
-            await response.arrayBuffer();
-
-
-        // =================================================
-        // PARSE GEOTIFF
-        // =================================================
-
-        var georaster =
-            await parseGeoraster(
-                arrayBuffer
-            );
-
-
-        console.log(
-            'Raster ' + year +
-            ' berhasil dibaca.'
-        );
-
-
-        console.log(
-            'Minimum:',
-            georaster.mins
-        );
-
-
-        console.log(
-            'Maximum:',
-            georaster.maxs
-        );
-
-
-        // =================================================
-        // TAMPILKAN RASTER
-        // =================================================
-
-        currentRaster =
-            new GeoRasterLayer({
-
-                georaster: georaster,
-
-                opacity: 0.85,
-
-                resolution: 256,
-
-
-                pixelValuesToColorFn:
-                function(values) {
-
-                    var value =
-                        values[0];
-
-                    return getColor(
-                        value
-                    );
-
-                }
-
-            });
-
-
-        // Tambahkan raster
-
-        currentRaster.addTo(
-            map
-        );
-
-
-        // =================================================
-        // ZOOM KE RASTER
-        // =================================================
-
-        var bounds =
-            currentRaster.getBounds();
-
-
-        if (bounds) {
-
-            map.fitBounds(
-                bounds
-            );
-
-        }
-
-
-        console.log(
-            'Raster tahun ' +
-            year +
-            ' berhasil ditampilkan.'
-        );
-
-
+    const bounds = rasterLayer.getBounds();
+    if (bounds && bounds.isValid()) {
+      map.fitBounds(bounds, { padding: [15, 15], maxZoom: 17 });
     }
 
-
-    catch(error) {
-
-
-        console.error(
-            'ERROR RASTER:',
-            error
-        );
-
-
-        alert(
-
-            'Raster tahun ' +
-            year +
-            ' gagal dimuat.\n\n' +
-
-            'File yang dicari:\n' +
-
-            rasterFiles[year] +
-
-            '\n\n' +
-
-            'Periksa nama file dan folder DATA di GitHub.'
-
-        );
-
+    setStatus(
+      "Berhasil menampilkan raster tahun " + year +
+      " · file: DATA/mangrove_" + year + ".tif"
+    );
+  } catch (error) {
+    console.error("Raster error:", error);
+    if (requestId === currentRequest) {
+      setStatus(
+        "Gagal memuat raster tahun " + year + ". " + error.message +
+        " Pastikan file TIFF tersedia dan dapat diakses melalui GitHub Pages."
+      );
     }
-
+  }
 }
 
-
-// =====================================================
-// DATA TABEL
-//
-// SEMENTARA 0
-// NANTI BISA DIISI DATA EXCEL
-// =====================================================
-
-var healthData = {
-
-
-    2021: [
-
-        ['Sangat Tidak Sehat', 0, 0],
-        ['Tidak Sehat', 0, 0],
-        ['Sedang', 0, 0],
-        ['Sehat', 0, 0],
-        ['Sangat Sehat', 0, 0]
-
-    ],
-
-
-    2022: [
-
-        ['Sangat Tidak Sehat', 0, 0],
-        ['Tidak Sehat', 0, 0],
-        ['Sedang', 0, 0],
-        ['Sehat', 0, 0],
-        ['Sangat Sehat', 0, 0]
-
-    ],
-
-
-    2023: [
-
-        ['Sangat Tidak Sehat', 0, 0],
-        ['Tidak Sehat', 0, 0],
-        ['Sedang', 0, 0],
-        ['Sehat', 0, 0],
-        ['Sangat Sehat', 0, 0]
-
-    ],
-
-
-    2024: [
-
-        ['Sangat Tidak Sehat', 0, 0],
-        ['Tidak Sehat', 0, 0],
-        ['Sedang', 0, 0],
-        ['Sehat', 0, 0],
-        ['Sangat Sehat', 0, 0]
-
-    ],
-
-
-    2025: [
-
-        ['Sangat Tidak Sehat', 0, 0],
-        ['Tidak Sehat', 0, 0],
-        ['Sedang', 0, 0],
-        ['Sehat', 0, 0],
-        ['Sangat Sehat', 0, 0]
-
-    ],
-
-
-    2026: [
-
-        ['Sangat Tidak Sehat', 0, 0],
-        ['Tidak Sehat', 0, 0],
-        ['Sedang', 0, 0],
-        ['Sehat', 0, 0],
-        ['Sangat Sehat', 0, 0]
-
-    ]
-
-};
-
-
-// =====================================================
-// UPDATE TABEL
-// =====================================================
-
-function updateTable(year) {
-
-
-    var table =
-        document.getElementById(
-            'healthTable'
-        );
-
-
-    table.innerHTML = '';
-
-
-    healthData[year].forEach(
-
-        function(row) {
-
-
-            var tr =
-                document.createElement(
-                    'tr'
-                );
-
-
-            tr.innerHTML = `
-
-                <td>${row[0]}</td>
-
-                <td>${row[1]}</td>
-
-                <td>${row[2]}</td>
-
-            `;
-
-
-            table.appendChild(
-                tr
-            );
-
-        }
-
-    );
-
+function changeYear() {
+  const year = Number($("yearSelect").value);
+  updateSummary(year);
+  renderTable(year);
+  loadRaster(year);
 }
 
+$("yearSelect").addEventListener("change", changeYear);
+$("reloadBtn").addEventListener("click", changeYear);
 
-// =====================================================
-// GANTI TAHUN
-// =====================================================
-
-function changeYear(year) {
-
-
-    // Update dropdown
-
-    document.getElementById(
-        'yearSelect'
-    ).value = year;
-
-
-    // Update informasi
-
-    document.getElementById(
-        'yearInfo'
-    ).innerHTML = year;
-
-
-    // Update judul tabel
-
-    document.getElementById(
-        'tableYear'
-    ).innerHTML = year;
-
-
-    // Update tabel
-
-    updateTable(
-        year
-    );
-
-
-    // Update raster
-
-    loadRaster(
-        year
-    );
-
-
-    // Update tombol
-
-    var buttons =
-        document.querySelectorAll(
-            '.year-button'
-        );
-
-
-    buttons.forEach(
-
-        function(button) {
-
-
-            button.classList.remove(
-                'active'
-            );
-
-
-            if (
-                button.innerText.trim()
-                ===
-                String(year)
-            ) {
-
-                button.classList.add(
-                    'active'
-                );
-
-            }
-
-        }
-
-    );
-
-}
-
-
-// =====================================================
-// DROPDOWN
-// =====================================================
-
-document
-.getElementById(
-    'yearSelect'
-)
-.addEventListener(
-
-    'change',
-
-    function() {
-
-        var year =
-            parseInt(
-                this.value
-            );
-
-        changeYear(
-            year
-        );
-
-    }
-
-);
-
-
-// =====================================================
-// TAMPILKAN 2021 SAAT WEBSITE DIBUKA
-// =====================================================
-
-updateTable(
-    2021
-);
-
-
-loadRaster(
-    2021
-);
-
+// Jalankan pertama kali.
+loadExcel();
+loadRaster(2021);
 </script>
-
-
 </body>
-
 </html>
