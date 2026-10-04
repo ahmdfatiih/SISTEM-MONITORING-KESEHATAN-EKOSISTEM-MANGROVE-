@@ -1,842 +1,682 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>
-WebGIS Monitoring Kesehatan Ekosistem Mangrove
+Sistem Monitoring Kesehatan Ekosistem Mangrove
 </title>
 
-
-<!-- =====================================================
-     LEAFLET
-===================================================== -->
-
+<!-- LEAFLET -->
 <link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
-<script
-src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-
-<!-- =====================================================
-     GEORASTER
-===================================================== -->
-
-<script
-src="https://unpkg.com/georaster@1.6.0/dist/georaster.browser.bundle.min.js">
-</script>
-
-
-<!-- =====================================================
-     GEORASTER LAYER FOR LEAFLET
-===================================================== -->
-
-<script
-src="https://unpkg.com/georaster-layer-for-leaflet@4.1.2/dist/georaster-layer-for-leaflet.min.js">
-</script>
-
+<!-- GEOJSON -->
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 
 <style>
-
-/* =====================================================
-   DASAR
-===================================================== */
 
 * {
     box-sizing: border-box;
 }
 
-html,
 body {
     margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f5;
+    color: #222;
 }
 
-
-/* =====================================================
-   HEADER
-===================================================== */
+/* ================= HEADER ================= */
 
 .header {
-
-    height: 70px;
-
-    background: #003b2b;
-
+    height: 72px;
+    background: #0d4f36;
     color: white;
 
-    padding: 12px 24px;
+    display: flex;
+    align-items: center;
 
+    padding: 0 25px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+
+    position: relative;
+    z-index: 1000;
 }
 
-.header h1 {
-
-    margin: 0;
-
-    font-size: 21px;
-
+.header-title {
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 0.3px;
 }
 
-.header p {
-
-    margin: 6px 0 0;
-
-    font-size: 13px;
-
+.header-subtitle {
+    font-size: 12px;
+    margin-top: 4px;
+    opacity: 0.85;
 }
 
-
-/* =====================================================
-   LAYOUT
-===================================================== */
+/* ================= LAYOUT ================= */
 
 .container {
-
     display: flex;
-
-    height: calc(100vh - 70px);
-
+    height: calc(100vh - 72px);
 }
 
-
-/* =====================================================
-   SIDEBAR
-===================================================== */
+/* ================= SIDEBAR ================= */
 
 .sidebar {
-
     width: 370px;
 
     background: white;
 
-    padding: 18px;
+    padding: 22px;
 
     overflow-y: auto;
 
-    box-shadow:
-        2px 0 8px rgba(0,0,0,0.25);
+    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
 
-    z-index: 1000;
-
+    z-index: 900;
 }
 
-
-.sidebar h2 {
-
-    margin-top: 0;
-
-    color: #064b38;
-
-    font-size: 20px;
-
+.section {
+    margin-bottom: 24px;
 }
 
-
-.sidebar h3 {
-
-    margin-top: 22px;
-
-    margin-bottom: 10px;
-
-    color: #064b38;
-
+.section-title {
     font-size: 14px;
+    font-weight: bold;
 
-    border-bottom:
-        2px solid #064b38;
+    color: #0d4f36;
 
-    padding-bottom: 6px;
+    margin-bottom: 12px;
 
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
 }
 
+/* ================= YEAR BUTTON ================= */
 
-/* =====================================================
-   PILIH TAHUN
-===================================================== */
-
-.tahun-container {
-
+.year-grid {
     display: grid;
 
-    grid-template-columns:
-        repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 
     gap: 8px;
-
 }
 
+.year-btn {
+    border: 1px solid #cbd5cf;
 
-.tahun-btn {
+    background: #f7f9f8;
 
-    border:
-        1px solid #006b45;
-
-    background: white;
-
-    color: #004d36;
+    color: #315347;
 
     padding: 10px 5px;
 
-    border-radius: 5px;
+    border-radius: 7px;
+
+    font-size: 14px;
 
     font-weight: bold;
 
     cursor: pointer;
 
+    transition: all 0.2s;
 }
 
-
-.tahun-btn:hover {
-
-    background: #e7f3ed;
-
+.year-btn:hover {
+    background: #e5eee9;
 }
 
-
-.tahun-btn.active {
-
-    background: #006b45;
+.year-btn.active {
+    background: #0d4f36;
 
     color: white;
 
+    border-color: #0d4f36;
 }
 
+/* ================= STATUS ================= */
 
-/* =====================================================
-   STATUS
-===================================================== */
-
-.status {
-
-    margin-top: 12px;
-
+.status-box {
     padding: 11px;
 
-    background: #eef7f2;
+    background: #f1f6f3;
 
-    border-left:
-        4px solid #006b45;
+    border-left: 4px solid #0d4f36;
+
+    border-radius: 4px;
 
     font-size: 13px;
 
     line-height: 1.5;
-
 }
 
+/* ================= LOADING ================= */
 
-/* =====================================================
-   LEGEND
-===================================================== */
+.loading {
+    display: none;
+
+    margin-top: 10px;
+
+    padding: 10px;
+
+    border-radius: 5px;
+
+    background: #fff7df;
+
+    color: #725800;
+
+    font-size: 13px;
+}
+
+.loading.active {
+    display: block;
+}
+
+/* ================= ERROR ================= */
+
+.error {
+    display: none;
+
+    margin-top: 10px;
+
+    padding: 10px;
+
+    border-radius: 5px;
+
+    background: #ffeaea;
+
+    color: #8a1c1c;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+.error.active {
+    display: block;
+}
+
+/* ================= LEGEND ================= */
 
 .legend-item {
-
     display: flex;
 
     align-items: center;
 
-    margin:
-        8px 0;
+    margin-bottom: 9px;
 
     font-size: 13px;
-
 }
-
 
 .legend-color {
+    width: 25px;
+    height: 18px;
 
-    width: 30px;
+    border-radius: 3px;
 
-    height: 19px;
+    margin-right: 9px;
 
-    margin-right: 10px;
-
-    border:
-        1px solid #555;
-
+    border: 1px solid rgba(0,0,0,0.15);
 }
 
+/* ================= TABLE ================= */
 
-/* =====================================================
-   TABEL
-===================================================== */
-
-.table-wrapper {
-
-    overflow-x: auto;
-
-}
-
-
-table {
-
+.health-table {
     width: 100%;
 
-    border-collapse:
-        collapse;
+    border-collapse: collapse;
 
     font-size: 12px;
-
 }
 
-
-th {
-
-    background: #004d36;
+.health-table th {
+    background: #0d4f36;
 
     color: white;
 
-    padding: 8px 5px;
+    padding: 8px;
 
     text-align: center;
-
 }
 
+.health-table td {
+    padding: 8px;
 
-td {
-
-    border:
-        1px solid #ccc;
-
-    padding: 7px 5px;
+    border-bottom: 1px solid #ddd;
 
     text-align: center;
-
 }
 
-
-td:first-child {
-
+.health-table td:nth-child(2) {
     text-align: left;
-
 }
 
+/* ================= INFO ================= */
 
-tr:nth-child(even) {
+.info-box {
+    background: #f7f9f8;
 
-    background: #f5f5f5;
+    border: 1px solid #dce5e0;
 
+    border-radius: 6px;
+
+    padding: 12px;
+
+    font-size: 12px;
+
+    line-height: 1.6;
 }
 
-
-/* =====================================================
-   TOTAL
-===================================================== */
-
-.total-row {
-
-    font-weight: bold;
-
-    background: #e7f3ed !important;
-
-}
-
-
-/* =====================================================
-   MAP
-===================================================== */
+/* ================= MAP ================= */
 
 #map {
-
     flex: 1;
 
     height: 100%;
 
+    min-width: 0;
 }
 
+/* ================= POPUP ================= */
 
-/* =====================================================
-   LOADING
-===================================================== */
-
-.loading {
-
-    position: fixed;
-
-    top: 50%;
-
-    left: 50%;
-
-    transform:
-        translate(-50%, -50%);
-
-    background:
-        rgba(0,0,0,0.85);
-
-    color: white;
-
-    padding:
-        20px 28px;
-
-    border-radius: 8px;
-
-    z-index: 99999;
-
-    display: none;
-
-    text-align: center;
-
-    min-width: 230px;
-
-}
-
-
-.loading-title {
-
-    font-size: 16px;
+.popup-title {
+    font-size: 15px;
 
     font-weight: bold;
 
+    color: #0d4f36;
+
+    margin-bottom: 8px;
 }
 
+.popup-class {
+    font-size: 14px;
 
-.loading-text {
+    font-weight: bold;
 
-    margin-top: 7px;
+    margin-bottom: 5px;
+}
 
+.popup-value {
     font-size: 12px;
 
+    color: #555;
 }
 
-
-/* =====================================================
-   ERROR
-===================================================== */
-
-.error-box {
-
-    background: #fff0f0;
-
-    border:
-        1px solid #cc0000;
-
-    color: #990000;
-
-    padding: 10px;
-
-    margin-top: 10px;
-
-    font-size: 12px;
-
-    display: none;
-
-}
-
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+/* ================= MOBILE ================= */
 
 @media(max-width: 800px) {
 
-    .sidebar {
-
-        width: 300px;
-
+    .container {
+        flex-direction: column;
     }
 
-    .header h1 {
+    .sidebar {
+        width: 100%;
 
+        height: auto;
+
+        max-height: 45vh;
+    }
+
+    #map {
+        height: 55vh;
+    }
+
+    .header-title {
         font-size: 17px;
-
     }
 
 }
 
 </style>
-
 </head>
 
 
 <body>
 
 
-<!-- =====================================================
+<!-- ======================================================
      HEADER
-===================================================== -->
+====================================================== -->
 
 <div class="header">
 
-    <h1>
-        WebGIS Monitoring Kesehatan Ekosistem Mangrove
-    </h1>
+    <div>
 
-    <p>
-        Desa Sidodadi, Kabupaten Pesawaran, Lampung
-    </p>
+        <div class="header-title">
+            SISTEM MONITORING KESEHATAN EKOSISTEM MANGROVE
+        </div>
+
+        <div class="header-subtitle">
+            Desa Sidodadi, Kabupaten Pesawaran, Lampung
+        </div>
+
+    </div>
 
 </div>
 
 
+<!-- ======================================================
+     MAIN CONTAINER
+====================================================== -->
 
 <div class="container">
 
 
-<!-- =====================================================
+<!-- ======================================================
      SIDEBAR
-===================================================== -->
+====================================================== -->
 
 <div class="sidebar">
 
 
-<h2>
-Monitoring Mangrove
-</h2>
+    <!-- ================= TAHUN ================= -->
 
+    <div class="section">
 
-<!-- =====================================================
-     PILIH TAHUN
-===================================================== -->
+        <div class="section-title">
+            Pilih Tahun
+        </div>
 
-<h3>
-PILIH TAHUN
-</h3>
+        <div class="year-grid">
 
+            <button
+                class="year-btn active"
+                data-year="2021"
+                onclick="loadYear(2021)">
+                2021
+            </button>
 
-<div class="tahun-container">
+            <button
+                class="year-btn"
+                data-year="2022"
+                onclick="loadYear(2022)">
+                2022
+            </button>
 
-    <button
-        class="tahun-btn active"
-        data-year="2021">
-        2021
-    </button>
+            <button
+                class="year-btn"
+                data-year="2023"
+                onclick="loadYear(2023)">
+                2023
+            </button>
 
-    <button
-        class="tahun-btn"
-        data-year="2022">
-        2022
-    </button>
+            <button
+                class="year-btn"
+                data-year="2024"
+                onclick="loadYear(2024)">
+                2024
+            </button>
 
-    <button
-        class="tahun-btn"
-        data-year="2023">
-        2023
-    </button>
+            <button
+                class="year-btn"
+                data-year="2025"
+                onclick="loadYear(2025)">
+                2025
+            </button>
 
-    <button
-        class="tahun-btn"
-        data-year="2024">
-        2024
-    </button>
+            <button
+                class="year-btn"
+                data-year="2026"
+                onclick="loadYear(2026)">
+                2026
+            </button>
 
-    <button
-        class="tahun-btn"
-        data-year="2025">
-        2025
-    </button>
+        </div>
 
-    <button
-        class="tahun-btn"
-        data-year="2026">
-        2026
-    </button>
-
-</div>
-
-
-<!-- =====================================================
-     STATUS
-===================================================== -->
-
-<h3>
-STATUS
-</h3>
-
-
-<div
-id="status"
-class="status">
-
-Memuat raster tahun 2021...
-
-</div>
-
-
-<div
-id="errorBox"
-class="error-box">
-</div>
-
-
-
-<!-- =====================================================
-     LEGENDA
-===================================================== -->
-
-<h3>
-KLASIFIKASI KESEHATAN MANGROVE
-</h3>
-
-
-<div class="legend-item">
-
-    <div
-    class="legend-color"
-    style="background:#8B0000;">
     </div>
 
-    <span>
-        Sangat Tidak Sehat
-    </span>
 
-</div>
+    <!-- ================= STATUS ================= -->
 
+    <div class="section">
 
-<div class="legend-item">
+        <div class="section-title">
+            Status Data
+        </div>
 
-    <div
-    class="legend-color"
-    style="background:#A65E24;">
+        <div
+            id="status"
+            class="status-box">
+
+            Memuat data tahun 2021...
+
+        </div>
+
+        <div
+            id="loading"
+            class="loading">
+
+            ⏳ Sedang memuat data...
+
+        </div>
+
+        <div
+            id="error"
+            class="error">
+
+        </div>
+
     </div>
 
-    <span>
-        Tidak Sehat
-    </span>
 
-</div>
+    <!-- ================= LEGEND ================= -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Klasifikasi Kesehatan Mangrove
+        </div>
 
 
-<div class="legend-item">
+        <div class="legend-item">
 
-    <div
-    class="legend-color"
-    style="background:#A6A67A;">
+            <div
+                class="legend-color"
+                style="background:#8B0000">
+            </div>
+
+            <span>
+                <b>1</b> — Sangat Tidak Sehat
+            </span>
+
+        </div>
+
+
+        <div class="legend-item">
+
+            <div
+                class="legend-color"
+                style="background:#F28C28">
+            </div>
+
+            <span>
+                <b>2</b> — Tidak Sehat
+            </span>
+
+        </div>
+
+
+        <div class="legend-item">
+
+            <div
+                class="legend-color"
+                style="background:#FFD84D">
+            </div>
+
+            <span>
+                <b>3</b> — Sedang
+            </span>
+
+        </div>
+
+
+        <div class="legend-item">
+
+            <div
+                class="legend-color"
+                style="background:#70AD47">
+            </div>
+
+            <span>
+                <b>4</b> — Sehat
+            </span>
+
+        </div>
+
+
+        <div class="legend-item">
+
+            <div
+                class="legend-color"
+                style="background:#006B3C">
+            </div>
+
+            <span>
+                <b>5</b> — Sangat Sehat
+            </span>
+
+        </div>
+
     </div>
 
-    <span>
-        Sedang
-    </span>
 
-</div>
+    <!-- ================= TABLE ================= -->
 
+    <div class="section">
 
-<div class="legend-item">
+        <div class="section-title">
+            Kelas Kesehatan
+        </div>
 
-    <div
-    class="legend-color"
-    style="background:#4F7F32;">
+        <table class="health-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Kelas
+                    </th>
+
+                    <th>
+                        Kondisi
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>1</td>
+
+                    <td>
+                        Sangat Tidak Sehat
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>2</td>
+
+                    <td>
+                        Tidak Sehat
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>3</td>
+
+                    <td>
+                        Sedang
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>4</td>
+
+                    <td>
+                        Sehat
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>5</td>
+
+                    <td>
+                        Sangat Sehat
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
     </div>
 
-    <span>
-        Sehat
-    </span>
 
-</div>
+    <!-- ================= INFO ================= -->
 
+    <div class="section">
 
-<div class="legend-item">
+        <div class="section-title">
+            Informasi
+        </div>
 
-    <div
-    class="legend-color"
-    style="background:#006B3C;">
+        <div class="info-box">
+
+            <b>Wilayah:</b><br>
+
+            Desa Sidodadi, Kecamatan Teluk Pandan,
+            Kabupaten Pesawaran, Provinsi Lampung.
+
+            <br><br>
+
+            <b>Data:</b><br>
+
+            Klasifikasi kesehatan ekosistem mangrove
+            tahun 2021–2026.
+
+            <br><br>
+
+            <b>Keterangan:</b><br>
+
+            Klik area mangrove pada peta untuk melihat
+            kelas kesehatan.
+
+        </div>
+
     </div>
 
-    <span>
-        Sangat Sehat
-    </span>
 
 </div>
 
 
-
-<!-- =====================================================
-     TABEL INDEX KESEHATAN
-===================================================== -->
-
-<h3>
-
-    INDEKS KESEHATAN MANGROVE
-
-    <span id="tableYear">
-        2021
-    </span>
-
-</h3>
-
-
-<div class="table-wrapper">
-
-<table>
-
-<thead>
-
-<tr>
-
-    <th>
-        Kelas
-    </th>
-
-    <th>
-        Luas (ha)
-    </th>
-
-    <th>
-        %
-    </th>
-
-</tr>
-
-</thead>
-
-
-<tbody>
-
-
-<tr>
-
-<td>
-Sangat Tidak Sehat
-</td>
-
-<td id="luas1">
-0.00
-</td>
-
-<td id="persen1">
-0.00
-</td>
-
-</tr>
-
-
-<tr>
-
-<td>
-Tidak Sehat
-</td>
-
-<td id="luas2">
-0.00
-</td>
-
-<td id="persen2">
-0.00
-</td>
-
-</tr>
-
-
-<tr>
-
-<td>
-Sedang
-</td>
-
-<td id="luas3">
-0.00
-</td>
-
-<td id="persen3">
-0.00
-</td>
-
-</tr>
-
-
-<tr>
-
-<td>
-Sehat
-</td>
-
-<td id="luas4">
-0.00
-</td>
-
-<td id="persen4">
-0.00
-</td>
-
-</tr>
-
-
-<tr>
-
-<td>
-Sangat Sehat
-</td>
-
-<td id="luas5">
-0.00
-</td>
-
-<td id="persen5">
-0.00
-</td>
-
-</tr>
-
-
-<tr class="total-row">
-
-<td>
-TOTAL
-</td>
-
-<td id="totalLuas">
-0.00
-</td>
-
-<td>
-100.00
-</td>
-
-</tr>
-
-
-</tbody>
-
-</table>
-
-</div>
-
-
-
-<!-- =====================================================
-     KETERANGAN
-===================================================== -->
-
-<h3>
-KETERANGAN
-</h3>
-
-
-<p
-style="
-font-size:12px;
-line-height:1.6;
-">
-
-Peta menampilkan hasil klasifikasi
-kesehatan ekosistem mangrove
-Desa Sidodadi berdasarkan data
-raster yang telah diolah.
-
-Klik tahun untuk mengganti
-tampilan raster dan tabel
-indeks kesehatan.
-
-</p>
-
-
-</div>
-
-
-
-<!-- =====================================================
+<!-- ======================================================
      MAP
-===================================================== -->
+====================================================== -->
 
 <div id="map"></div>
 
@@ -844,269 +684,54 @@ indeks kesehatan.
 </div>
 
 
-
-<!-- =====================================================
-     LOADING
-===================================================== -->
-
-<div
-id="loading"
-class="loading">
-
-    <div class="loading-title">
-        Memuat raster...
-    </div>
-
-    <div
-    id="loadingText"
-    class="loading-text">
-
-        Tahun 2021
-
-    </div>
-
-</div>
-
-
-
 <script>
 
 
-// =====================================================
-// 1. KONFIGURASI TAHUN
-// =====================================================
+/* ======================================================
+   DATA GEOJSON
+====================================================== */
 
-const RASTER = {
+const DATA = {
 
-    2021:
-        "DATA/mangrove_2021.tif",
+    2021: "DATA/mangrove_2021.geojson",
 
-    2022:
-        "DATA/mangrove_2022.tif",
+    2022: "DATA/mangrove_2022.geojson",
 
-    2023:
-        "DATA/mangrove_2023.tif",
+    2023: "DATA/mangrove_2023.geojson",
 
-    2024:
-        "DATA/mangrove_2024.tif",
+    2024: "DATA/mangrove_2024.geojson",
 
-    2025:
-        "DATA/mangrove_2025.tif",
+    2025: "DATA/mangrove_2025.geojson",
 
-    2026:
-        "DATA/mangrove_2026.tif"
+    2026: "DATA/mangrove_2026.geojson"
 
 };
 
 
+/* ======================================================
+   WARNA KELAS
+====================================================== */
 
-// =====================================================
-// 2. DATA TABEL INDEKS
-// =====================================================
-//
-// MASUKKAN DATA ANDA DI SINI.
-//
-// Contoh:
-// luas = luas dalam hektare
-//
-// persen = persentase luas kelas
-//
-// Untuk sementara nilainya 0.
-// Nanti tinggal diganti sesuai hasil
-// pengolahan Anda.
-//
+const COLORS = {
 
-const DATA_KESEHATAN = {
+    1: "#8B0000",
 
+    2: "#F28C28",
 
-    2021: {
+    3: "#FFD84D",
 
-        1: {
-            luas: 0,
-            persen: 0
-        },
+    4: "#70AD47",
 
-        2: {
-            luas: 0,
-            persen: 0
-        },
-
-        3: {
-            luas: 0,
-            persen: 0
-        },
-
-        4: {
-            luas: 0,
-            persen: 0
-        },
-
-        5: {
-            luas: 0,
-            persen: 0
-        }
-
-    },
-
-
-    2022: {
-
-        1: {
-            luas: 0,
-            persen: 0
-        },
-
-        2: {
-            luas: 0,
-            persen: 0
-        },
-
-        3: {
-            luas: 0,
-            persen: 0
-        },
-
-        4: {
-            luas: 0,
-            persen: 0
-        },
-
-        5: {
-            luas: 0,
-            persen: 0
-        }
-
-    },
-
-
-    2023: {
-
-        1: {
-            luas: 0,
-            persen: 0
-        },
-
-        2: {
-            luas: 0,
-            persen: 0
-        },
-
-        3: {
-            luas: 0,
-            persen: 0
-        },
-
-        4: {
-            luas: 0,
-            persen: 0
-        },
-
-        5: {
-            luas: 0,
-            persen: 0
-        }
-
-    },
-
-
-    2024: {
-
-        1: {
-            luas: 0,
-            persen: 0
-        },
-
-        2: {
-            luas: 0,
-            persen: 0
-        },
-
-        3: {
-            luas: 0,
-            persen: 0
-        },
-
-        4: {
-            luas: 0,
-            persen: 0
-        },
-
-        5: {
-            luas: 0,
-            persen: 0
-        }
-
-    },
-
-
-    2025: {
-
-        1: {
-            luas: 0,
-            persen: 0
-        },
-
-        2: {
-            luas: 0,
-            persen: 0
-        },
-
-        3: {
-            luas: 0,
-            persen: 0
-        },
-
-        4: {
-            luas: 0,
-            persen: 0
-        },
-
-        5: {
-            luas: 0,
-            persen: 0
-        }
-
-    },
-
-
-    2026: {
-
-        1: {
-            luas: 0,
-            persen: 0
-        },
-
-        2: {
-            luas: 0,
-            persen: 0
-        },
-
-        3: {
-            luas: 0,
-            persen: 0
-        },
-
-        4: {
-            luas: 0,
-            persen: 0
-        },
-
-        5: {
-            luas: 0,
-            persen: 0
-        }
-
-    }
+    5: "#006B3C"
 
 };
 
 
+/* ======================================================
+   NAMA KELAS
+====================================================== */
 
-// =====================================================
-// 3. NAMA KELAS
-// =====================================================
-
-const NAMA_KELAS = {
+const CLASS_NAMES = {
 
     1: "Sangat Tidak Sehat",
 
@@ -1121,58 +746,30 @@ const NAMA_KELAS = {
 };
 
 
-
-// =====================================================
-// 4. WARNA
-// =====================================================
-
-const WARNA = {
-
-    1: "#8B0000",
-
-    2: "#A65E24",
-
-    3: "#A6A67A",
-
-    4: "#4F7F32",
-
-    5: "#006B3C"
-
-};
-
-
-
-// =====================================================
-// 5. BUAT PETA
-// =====================================================
+/* ======================================================
+   INISIALISASI MAP
+====================================================== */
 
 const map = L.map("map", {
 
-    center: [
-        -5.53,
-        105.25
-    ],
+    center: [-5.53, 105.25],
 
     zoom: 12
 
 });
 
 
-
-// =====================================================
-// 6. BASEMAP IMAGERY
-// =====================================================
+/* ======================================================
+   BASEMAP ESRI WORLD IMAGERY
+====================================================== */
 
 const imagery = L.tileLayer(
 
-    "https://server.arcgisonline.com/" +
-    "ArcGIS/rest/services/" +
-    "World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
 
     {
 
-        attribution:
-        "Tiles &copy; Esri",
+        attribution: "Tiles &copy; Esri",
 
         maxZoom: 19
 
@@ -1181,20 +778,17 @@ const imagery = L.tileLayer(
 ).addTo(map);
 
 
-
-// =====================================================
-// 7. BASEMAP OSM
-// =====================================================
+/* ======================================================
+   OPEN STREET MAP
+====================================================== */
 
 const osm = L.tileLayer(
 
-    "https://{s}.tile.openstreetmap.org/" +
-    "{z}/{x}/{y}.png",
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
 
     {
 
-        attribution:
-        "&copy; OpenStreetMap contributors",
+        attribution: "&copy; OpenStreetMap contributors",
 
         maxZoom: 19
 
@@ -1203,20 +797,17 @@ const osm = L.tileLayer(
 );
 
 
-
-// =====================================================
-// 8. BASEMAP CONTROL
-// =====================================================
+/* ======================================================
+   BASEMAP CONTROL
+====================================================== */
 
 L.control.layers(
 
     {
 
-        "Esri World Imagery":
-            imagery,
+        "Esri World Imagery": imagery,
 
-        "OpenStreetMap":
-            osm
+        "OpenStreetMap": osm
 
     },
 
@@ -1224,49 +815,29 @@ L.control.layers(
 
     {
 
-        position:
-            "topright"
+        position: "topright"
 
     }
 
 ).addTo(map);
 
 
+/* ======================================================
+   VARIABLE AKTIF
+====================================================== */
 
-// =====================================================
-// 9. VARIABEL RASTER AKTIF
-// =====================================================
-
-let activeRasterLayer = null;
+let activeLayer = null;
 
 let activeYear = 2021;
 
 
+/* ======================================================
+   MENDAPATKAN FIELD KELAS
+====================================================== */
 
-// =====================================================
-// 10. FUNGSI WARNA RASTER
-// =====================================================
+function getClassValue(properties) {
 
-function warnaRaster(values) {
-
-
-    if (
-        !values ||
-        values.length === 0
-    ) {
-
-        return null;
-
-    }
-
-
-    const value =
-        Number(values[0]);
-
-
-    if (
-        !Number.isFinite(value)
-    ) {
+    if (!properties) {
 
         return null;
 
@@ -1274,62 +845,76 @@ function warnaRaster(values) {
 
 
     /*
-    Asumsi nilai raster:
-
-    1 = Sangat Tidak Sehat
-    2 = Tidak Sehat
-    3 = Sedang
-    4 = Sehat
-    5 = Sangat Sehat
+       Daftar kemungkinan nama field.
+       Sistem akan mencari otomatis.
     */
 
+    const possibleFields = [
 
-    if (
-        value >= 1 &&
-        value < 1.5
-    ) {
+        "kelas",
 
-        return WARNA[1];
+        "KELAS",
+
+        "class",
+
+        "CLASS",
+
+        "Class",
+
+        "health",
+
+        "HEALTH",
+
+        "nilai",
+
+        "NILAI",
+
+        "value",
+
+        "VALUE"
+
+    ];
+
+
+    for (const field of possibleFields) {
+
+        if (
+            properties[field] !== undefined &&
+            properties[field] !== null &&
+            properties[field] !== ""
+        ) {
+
+            const value = Number(properties[field]);
+
+            if (value >= 1 && value <= 5) {
+
+                return Math.round(value);
+
+            }
+
+        }
 
     }
 
 
-    if (
-        value >= 2 &&
-        value < 2.5
-    ) {
+    /*
+       Jika field tidak ditemukan,
+       coba membaca nilai numerik pertama.
+    */
 
-        return WARNA[2];
+    for (const key in properties) {
 
-    }
+        const value = Number(properties[key]);
 
+        if (
+            !isNaN(value) &&
+            value >= 1 &&
+            value <= 5
+        ) {
 
-    if (
-        value >= 3 &&
-        value < 3.5
-    ) {
+            return Math.round(value);
 
-        return WARNA[3];
-
-    }
-
-
-    if (
-        value >= 4 &&
-        value < 4.5
-    ) {
-
-        return WARNA[4];
-
-    }
-
-
-    if (
-        value >= 5 &&
-        value < 5.5
-    ) {
-
-        return WARNA[5];
+        }
 
     }
 
@@ -1339,167 +924,224 @@ function warnaRaster(values) {
 }
 
 
+/* ======================================================
+   STYLE POLYGON
+====================================================== */
 
-// =====================================================
-// 11. UPDATE TABEL
-// =====================================================
+function polygonStyle(feature) {
 
-function updateTable(year) {
+    const kelas = getClassValue(feature.properties);
 
+    return {
 
-    const data =
-        DATA_KESEHATAN[year];
+        color:
 
+            kelas
+            ? COLORS[kelas]
+            : "#777777",
 
-    document.getElementById(
-        "tableYear"
-    ).innerText = year;
+        weight: 0.7,
 
+        opacity: 0.9,
 
-    let total =
-        0;
+        fillColor:
 
+            kelas
+            ? COLORS[kelas]
+            : "#777777",
 
-    for (
-        let kelas = 1;
-        kelas <= 5;
-        kelas++
-    ) {
+        fillOpacity: 0.72
 
+    };
 
-        const luas =
-            Number(
-                data[kelas].luas
-            );
-
-
-        const persen =
-            Number(
-                data[kelas].persen
-            );
+}
 
 
-        document.getElementById(
-            "luas" + kelas
-        ).innerText =
-            luas.toFixed(2);
+/* ======================================================
+   HIGHLIGHT
+====================================================== */
+
+function highlightFeature(e) {
+
+    const layer = e.target;
+
+    layer.setStyle({
+
+        weight: 2,
+
+        color: "#ffffff",
+
+        fillOpacity: 0.85
+
+    });
+
+}
 
 
-        document.getElementById(
-            "persen" + kelas
-        ).innerText =
-            persen.toFixed(2);
+function resetHighlight(e) {
+
+    activeLayer.resetStyle(e.target);
+
+}
 
 
-        total += luas;
+/* ======================================================
+   POPUP
+====================================================== */
+
+function showPopup(e) {
+
+    const layer = e.target;
+
+    const properties = layer.feature.properties || {};
+
+    const kelas = getClassValue(properties);
+
+
+    let html = `
+
+        <div class="popup-title">
+
+            Kesehatan Mangrove
+
+        </div>
+
+    `;
+
+
+    if (kelas) {
+
+        html += `
+
+            <div
+                class="popup-class"
+                style="color:${COLORS[kelas]}"
+            >
+
+                Kelas ${kelas} —
+                ${CLASS_NAMES[kelas]}
+
+            </div>
+
+        `;
 
     }
 
 
-    document.getElementById(
-        "totalLuas"
-    ).innerText =
-        total.toFixed(2);
+    /*
+       Menampilkan atribut lainnya.
+    */
+
+    let attributeHTML = "";
+
+
+    Object.keys(properties).forEach(function(key) {
+
+        const value = properties[key];
+
+        if (
+            value !== null &&
+            value !== undefined &&
+            value !== ""
+        ) {
+
+            attributeHTML += `
+
+                <div class="popup-value">
+
+                    <b>${key}</b>:
+                    ${value}
+
+                </div>
+
+            `;
+
+        }
+
+    });
+
+
+    html += attributeHTML;
+
+
+    layer.bindPopup(html).openPopup();
 
 }
 
 
+/* ======================================================
+   EVENT POLYGON
+====================================================== */
 
-// =====================================================
-// 12. LOADING
-// =====================================================
+function onEachFeature(feature, layer) {
 
-function showLoading(year) {
+    layer.on({
 
+        mouseover: highlightFeature,
 
-    document.getElementById(
-        "loading"
-    ).style.display =
-        "block";
+        mouseout: resetHighlight,
 
+        click: showPopup
 
-    document.getElementById(
-        "loadingText"
-    ).innerText =
-        "Tahun " + year;
+    });
 
 }
 
 
-function hideLoading() {
+/* ======================================================
+   LOAD GEOJSON
+====================================================== */
+
+async function loadYear(year) {
 
 
-    document.getElementById(
-        "loading"
-    ).style.display =
-        "none";
-
-}
+    activeYear = year;
 
 
+    const status = document.getElementById("status");
 
-// =====================================================
-// 13. STATUS
-// =====================================================
+    const loading = document.getElementById("loading");
 
-function setStatus(text) {
-
-
-    document.getElementById(
-        "status"
-    ).innerHTML =
-        text;
-
-}
+    const error = document.getElementById("error");
 
 
+    /* ==============================
+       UI
+    ============================== */
 
-// =====================================================
-// 14. LOAD RASTER
-// =====================================================
+    loading.classList.add("active");
 
-async function loadRaster(year) {
+    error.classList.remove("active");
 
-
-    activeYear =
-        year;
-
-
-    const url =
-        RASTER[year];
+    error.innerHTML = "";
 
 
-    showLoading(year);
+    status.innerHTML =
+
+        `Memuat data kesehatan mangrove tahun <b>${year}</b>...`;
 
 
-    setStatus(
-        "Memuat raster kesehatan mangrove tahun " +
-        year +
-        "..."
+    /* ==============================
+       ACTIVE BUTTON
+    ============================== */
+
+    document.querySelectorAll(".year-btn").forEach(function(btn) {
+
+        btn.classList.remove("active");
+
+    });
+
+
+    const selectedButton = document.querySelector(
+
+        `.year-btn[data-year="${year}"]`
+
     );
 
 
-    document.getElementById(
-        "errorBox"
-    ).style.display =
-        "none";
+    if (selectedButton) {
 
-
-    /*
-    Hapus raster tahun sebelumnya
-    */
-
-
-    if (
-        activeRasterLayer
-    ) {
-
-        map.removeLayer(
-            activeRasterLayer
-        );
-
-        activeRasterLayer =
-            null;
+        selectedButton.classList.add("active");
 
     }
 
@@ -1507,434 +1149,222 @@ async function loadRaster(year) {
     try {
 
 
-        console.log(
-            "Memuat:",
-            url
+        /* ==============================
+           HAPUS LAYER LAMA
+        ============================== */
+
+        if (activeLayer) {
+
+            map.removeLayer(activeLayer);
+
+            activeLayer = null;
+
+        }
+
+
+        /* ==============================
+           FETCH GEOJSON
+        ============================== */
+
+        const response = await fetch(
+
+            DATA[year] + "?v=" + Date.now()
+
         );
 
 
-        /*
-        Tambahkan cache-buster.
-        */
-
-        const response =
-            await fetch(
-                url +
-                "?v=" +
-                Date.now()
-            );
-
-
-        /*
-        CEK FILE
-        */
-
-        if (
-            !response.ok
-        ) {
+        if (!response.ok) {
 
             throw new Error(
 
-                "HTTP " +
-                response.status +
-                " - file tidak ditemukan"
+                `File tidak ditemukan (${response.status})`
 
             );
 
         }
 
 
-        /*
-        Ambil file TIFF
-        */
-
-        const arrayBuffer =
-            await response.arrayBuffer();
+        const geojson = await response.json();
 
 
-        console.log(
-            "Ukuran TIFF:",
-            arrayBuffer.byteLength
+        /* ==============================
+           BUAT LAYER
+        ============================== */
+
+        activeLayer = L.geoJSON(
+
+            geojson,
+
+            {
+
+                style: polygonStyle,
+
+                onEachFeature: onEachFeature
+
+            }
+
         );
 
 
-        if (
-            arrayBuffer.byteLength === 0
-        ) {
+        /* ==============================
+           TAMBAHKAN KE MAP
+        ============================== */
 
-            throw new Error(
-                "File TIFF kosong."
-            );
-
-        }
+        activeLayer.addTo(map);
 
 
-        /*
-        Parse GeoTIFF
-        */
-
-        const georaster =
-            await parseGeoraster(
-                arrayBuffer
-            );
-
-
-        console.log(
-            "GeoRaster:",
-            georaster
-        );
+        /* =================================================
+           PENTING:
+           TIDAK ADA map.fitBounds()
+           
+           Sehingga posisi dan zoom pengguna
+           TETAP dipertahankan ketika mengganti tahun.
+        ================================================= */
 
 
-        /*
-        Buat layer
-        */
+        /* ==============================
+           HITUNG JUMLAH FEATURE
+        ============================== */
 
-        activeRasterLayer =
-            new GeoRasterLayer({
+        const totalFeature =
 
-                georaster:
-                    georaster,
+            geojson.features
+            ? geojson.features.length
+            : 0;
 
-                opacity:
-                    0.75,
 
-                resolution:
-                    256,
+        /* ==============================
+           HITUNG KELAS
+        ============================== */
 
-                resampleMethod:
-                    "nearest",
+        const count = {
 
-                pixelValuesToColorFn:
-                    warnaRaster
+            1: 0,
+
+            2: 0,
+
+            3: 0,
+
+            4: 0,
+
+            5: 0
+
+        };
+
+
+        if (geojson.features) {
+
+            geojson.features.forEach(function(feature) {
+
+                const kelas = getClassValue(
+
+                    feature.properties
+
+                );
+
+
+                if (kelas >= 1 && kelas <= 5) {
+
+                    count[kelas]++;
+
+                }
 
             });
 
-
-        /*
-        Tambahkan ke peta
-        */
-
-        activeRasterLayer.addTo(
-            map
-        );
-
-
-        /*
-        Zoom ke raster
-        */
-
-        const bounds =
-            activeRasterLayer.getBounds();
-
-
-        if (
-            bounds &&
-            bounds.isValid()
-        ) {
-
-            map.fitBounds(
-                bounds,
-                {
-                    padding: [
-                        20,
-                        20
-                    ]
-                }
-            );
-
         }
 
 
-        /*
-        Update tabel
-        */
+        /* ==============================
+           STATUS
+        ============================== */
 
-        updateTable(
-            year
-        );
+        status.innerHTML = `
 
+            <b>Data Tahun ${year}</b><br>
 
-        /*
-        Status sukses
-        */
+            Jumlah area: ${totalFeature.toLocaleString("id-ID")}<br>
 
-        setStatus(
+            <span style="color:#8B0000">
+            Sangat Tidak Sehat:
+            ${count[1].toLocaleString("id-ID")}
+            </span><br>
 
-            "Raster tahun " +
-            year +
-            " berhasil dimuat."
+            <span style="color:#F28C28">
+            Tidak Sehat:
+            ${count[2].toLocaleString("id-ID")}
+            </span><br>
 
-        );
+            <span style="color:#B59B00">
+            Sedang:
+            ${count[3].toLocaleString("id-ID")}
+            </span><br>
 
+            <span style="color:#4F8A32">
+            Sehat:
+            ${count[4].toLocaleString("id-ID")}
+            </span><br>
 
-        hideLoading();
+            <span style="color:#006B3C">
+            Sangat Sehat:
+            ${count[5].toLocaleString("id-ID")}
+            </span>
 
-
-        /*
-        Aktifkan tombol tahun
-        */
-
-        document
-        .querySelectorAll(
-            ".tahun-btn"
-        )
-        .forEach(
-            function(button) {
-
-                button.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
-        const activeButton =
-            document.querySelector(
-                '[data-year="' +
-                year +
-                '"]'
-            );
-
-
-        if (
-            activeButton
-        ) {
-
-            activeButton.classList.add(
-                "active"
-            );
-
-        }
-
-
-        /*
-        Klik raster
-        */
-
-        activeRasterLayer.on(
-            "click",
-            function(e) {
-
-
-                const value =
-                    activeRasterLayer.getValueAtLatLng(
-                        e.latlng.lat,
-                        e.latlng.lng
-                    );
-
-
-                if (
-                    value === undefined ||
-                    value === null
-                ) {
-
-                    return;
-
-                }
-
-
-                const numericValue =
-                    Number(value);
-
-
-                let kelas =
-                    "Tidak diketahui";
-
-
-                if (
-                    numericValue >= 1 &&
-                    numericValue < 1.5
-                ) {
-
-                    kelas =
-                        NAMA_KELAS[1];
-
-                }
-
-                else if (
-                    numericValue >= 2 &&
-                    numericValue < 2.5
-                ) {
-
-                    kelas =
-                        NAMA_KELAS[2];
-
-                }
-
-                else if (
-                    numericValue >= 3 &&
-                    numericValue < 3.5
-                ) {
-
-                    kelas =
-                        NAMA_KELAS[3];
-
-                }
-
-                else if (
-                    numericValue >= 4 &&
-                    numericValue < 4.5
-                ) {
-
-                    kelas =
-                        NAMA_KELAS[4];
-
-                }
-
-                else if (
-                    numericValue >= 5 &&
-                    numericValue < 5.5
-                ) {
-
-                    kelas =
-                        NAMA_KELAS[5];
-
-                }
-
-
-                L.popup()
-
-                .setLatLng(
-                    e.latlng
-                )
-
-                .setContent(
-
-                    "<b>Informasi Mangrove</b>" +
-
-                    "<br>Tahun: " +
-                    year +
-
-                    "<br>Nilai raster: " +
-                    numericValue +
-
-                    "<br>Kelas: " +
-                    kelas
-
-                )
-
-                .openOn(
-                    map
-                );
-
-            }
-        );
+        `;
 
 
     }
 
-
-    catch(error) {
-
-
-        console.error(
-            "ERROR RASTER:",
-            error
-        );
+    catch (err) {
 
 
-        hideLoading();
+        console.error(err);
 
 
-        setStatus(
-            "Raster tahun " +
-            year +
-            " gagal dimuat."
-        );
+        status.innerHTML =
+
+            `Data tahun <b>${year}</b> gagal dimuat.`;
 
 
-        const errorBox =
-            document.getElementById(
-                "errorBox"
-            );
+        error.innerHTML = `
+
+            <b>Terjadi kesalahan.</b><br><br>
+
+            ${err.message}
+
+            <br><br>
+
+            Pastikan file tersedia di:
+
+            <br>
+
+            <b>${DATA[year]}</b>
+
+        `;
 
 
-        errorBox.style.display =
-            "block";
+        error.classList.add("active");
 
 
-        errorBox.innerHTML =
+    }
 
-            "<b>Raster gagal dimuat.</b>" +
+    finally {
 
-            "<br><br>" +
-
-            "File yang dicari:" +
-
-            "<br>" +
-
-            "<code>" +
-            url +
-            "</code>" +
-
-            "<br><br>" +
-
-            "Detail error:" +
-
-            "<br>" +
-
-            error.message;
-
+        loading.classList.remove("active");
 
     }
 
 }
 
 
+/* ======================================================
+   LOAD DATA AWAL
+====================================================== */
 
-// =====================================================
-// 15. TOMBOL TAHUN
-// =====================================================
-
-document
-.querySelectorAll(
-    ".tahun-btn"
-)
-.forEach(
-    function(button) {
-
-
-        button.addEventListener(
-            "click",
-            function() {
-
-
-                const year =
-                    Number(
-                        this.dataset.year
-                    );
-
-
-                loadRaster(
-                    year
-                );
-
-            }
-
-        );
-
-    }
-);
-
-
-
-// =====================================================
-// 16. LOAD AWAL 2021
-// =====================================================
-
-updateTable(
-    2021
-);
-
-
-loadRaster(
-    2021
-);
+loadYear(2021);
 
 
 </script>
 
-</body>
 
+</body>
 </html>
