@@ -2,477 +2,361 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WebGIS Kesehatan Ekosistem Mangrove</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WebGIS Monitoring Kesehatan Mangrove</title>
 
-  <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      color: #18352d;
-      background: #f3f7f4;
-    }
-    header {
-      background: #145c43;
-      color: white;
-      padding: 20px;
-    }
-    header h1 { margin: 0 0 8px; font-size: 24px; }
-    header p { margin: 0; line-height: 1.5; }
-    main { max-width: 1400px; margin: auto; padding: 16px; }
-    .panel {
-      background: white;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 10px #0000000c;
-    }
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-    }
-    select, button {
-      padding: 10px 14px;
-      border-radius: 7px;
-      border: 1px solid #b9cbc1;
-      font-size: 15px;
-    }
-    button {
-      cursor: pointer;
-      color: white;
-      background: #16744f;
-      border: 0;
-    }
-    button:hover { background: #105a3d; }
-    #map {
-      height: 65vh;
-      min-height: 380px;
-      border-radius: 10px;
-      background: #e2ebe5;
-    }
-    .status {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 7px;
-      background: #eef5f0;
-      overflow-wrap: anywhere;
-    }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .stat {
-      padding: 15px;
-      background: #f0f7f2;
-      border-radius: 9px;
-      min-width: 0;
-    }
-    .stat small { color: #4d6a5b; }
-    .stat strong {
-      display: block;
-      font-size: 21px;
-      margin-top: 8px;
-      overflow-wrap: anywhere;
-    }
-    .table-wrap { overflow-x: auto; }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      font-size: 14px;
-    }
-    th, td {
-      border: 1px solid #dce6df;
-      padding: 10px;
-      text-align: left;
-      white-space: nowrap;
-    }
-    th { background: #e8f2eb; }
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 12px;
-      font-size: 13px;
-    }
-    .dot {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border-radius: 3px;
-      margin-right: 5px;
-    }
-    footer { padding: 20px; text-align: center; color: #60776b; }
-    @media(max-width: 700px) {
-      header h1 { font-size: 20px; }
-      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      #map { height: 55vh; min-height: 340px; }
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f7f4;color:#203c30}
+header{background:#145c43;color:white;padding:20px}
+header h1{margin:0 0 8px;font-size:24px}
+main{max-width:1400px;margin:auto;padding:16px}
+.panel{background:white;padding:16px;margin-bottom:16px;border-radius:12px;box-shadow:0 2px 8px #0001}
+.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+select,button{padding:10px 14px;border:1px solid #b9cbc1;border-radius:7px;font-size:15px}
+button{background:#16744f;color:white;cursor:pointer;border:0}
+#map{height:65vh;min-height:360px;border-radius:10px;background:#e2ebe5}
+.status{margin-top:12px;padding:10px;background:#eef5f0;border-radius:7px;overflow-wrap:anywhere}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{background:#f0f7f2;padding:14px;border-radius:8px;overflow-wrap:anywhere}
+.stat strong{display:block;font-size:21px;margin-top:8px}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:10px;border:1px solid #dce6df;text-align:left;white-space:nowrap}
+th{background:#e8f2eb}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:13px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px}
+footer{text-align:center;padding:20px;color:#60776b}
+@media(max-width:700px){
+ header h1{font-size:20px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #map{height:55vh;min-height:320px}
+}
+</style>
 </head>
 
 <body>
 <header>
   <h1>WebGIS Monitoring Kesehatan Ekosistem Mangrove</h1>
-  <p>Desa Sidodadi, Kabupaten Pesawaran, Provinsi Lampung</p>
-  <p>Monitoring tahunan 2021–2026</p>
+  <div>Desa Sidodadi, Kabupaten Pesawaran, Provinsi Lampung</div>
+  <div>Monitoring tahun 2021–2026</div>
 </header>
 
 <main>
-  <section class="panel">
-    <h2>Pilih Tahun Pengamatan</h2>
-    <div class="controls">
-      <label for="yearSelect">Tahun:</label>
-      <select id="yearSelect">
-        <option value="2021">2021</option>
-        <option value="2022">2022</option>
-        <option value="2023">2023</option>
-        <option value="2024">2024</option>
-        <option value="2025">2025</option>
-        <option value="2026">2026</option>
-      </select>
-      <button id="reloadBtn" type="button">Muat Ulang Raster</button>
-    </div>
-    <div id="status" class="status" role="status">
-      Menyiapkan peta...
-    </div>
-  </section>
+<section class="panel">
+  <h2>Pilih Tahun Pengamatan</h2>
+  <div class="controls">
+    <label for="yearSelect">Tahun:</label>
+    <select id="yearSelect">
+      <option>2021</option><option>2022</option><option>2023</option>
+      <option>2024</option><option>2025</option><option>2026</option>
+    </select>
+    <button id="reloadBtn">Muat Ulang Raster</button>
+  </div>
+  <div id="status" class="status">Menyiapkan peta...</div>
+</section>
 
-  <section class="panel">
-    <h2>Peta Sebaran Mangrove <span id="activeYear">2021</span></h2>
-    <div id="map"></div>
-    <div class="legend">
-      <span><i class="dot" style="background:#d73027"></i>Nilai rendah</span>
-      <span><i class="dot" style="background:#fee08b"></i>Nilai sedang</span>
-      <span><i class="dot" style="background:#1a9850"></i>Nilai tinggi</span>
-    </div>
-    <p style="font-size:13px;color:#60776b">
-      Warna pada legenda merupakan gradasi visual nilai raster,
-      bukan batas kelas kesehatan resmi.
-    </p>
-  </section>
+<section class="panel">
+  <h2>Peta Sebaran Mangrove <span id="activeYear">2021</span></h2>
+  <div id="map"></div>
+  <div class="legend">
+    <span><i class="dot" style="background:#35a853"></i>Piksel data ditampilkan</span>
+    <span>Area transparan = tidak ditampilkan</span>
+  </div>
+  <p style="font-size:13px;color:#60776b">
+    Warna hijau hanya menunjukkan piksel raster valid, bukan klasifikasi kesehatan resmi.
+  </p>
+</section>
 
-  <section class="panel">
-    <h2>Ringkasan Data <span id="summaryYear">2021</span></h2>
-    <div class="stats">
-      <div class="stat"><small>Luas</small><strong id="luas">—</strong></div>
-      <div class="stat"><small>NDVI</small><strong id="ndvi">—</strong></div>
-      <div class="stat"><small>NDMI</small><strong id="ndmi">—</strong></div>
-      <div class="stat"><small>MNDWI</small><strong id="mndwi">—</strong></div>
-    </div>
-  </section>
+<section class="panel">
+  <h2>Ringkasan Data Tahun <span id="summaryYear">2021</span></h2>
+  <div class="stats">
+    <div class="stat">Luas<strong id="luas">—</strong></div>
+    <div class="stat">NDVI<strong id="ndvi">—</strong></div>
+    <div class="stat">NDMI<strong id="ndmi">—</strong></div>
+    <div class="stat">MNDWI<strong id="mndwi">—</strong></div>
+  </div>
+</section>
 
-  <section class="panel">
-    <h2>Tabel Data Excel</h2>
-    <p id="excelStatus">Membaca data Excel...</p>
-    <div class="table-wrap">
-      <table>
-        <thead id="tableHead"></thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-    </div>
-  </section>
+<section class="panel">
+  <h2>Tabel Data Excel</h2>
+  <p id="excelStatus">Membaca Excel...</p>
+  <div class="table-wrap">
+    <table>
+      <thead id="tableHead"></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</section>
 </main>
 
-<footer>
-  WebGIS Monitoring Kesehatan Ekosistem Mangrove · 2021–2026
-</footer>
+<footer>WebGIS Mangrove · 2021–2026</footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/georaster"></script>
 <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
-<script src="https://cdn.jsdelivr.net/npm/geotiff@2.1.3/dist-browser/geotiff.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <script>
 "use strict";
 
-// =====================================================
-// KONFIGURASI FILE: sesuaikan dengan nama file GitHub
-// =====================================================
+// ==================================================
+// NAMA FILE HARUS SESUAI DENGAN REPOSITORY GITHUB
+// ==================================================
 const DATA_FOLDER = "./DATA/";
 const EXCEL_FILE = DATA_FOLDER + "NILAI%20INDEKS%20KEMKER%20(1).xlsx";
 
-const YEARS = [2021, 2022, 2023, 2024, 2025, 2026];
-
-// Peta awal: sekitar wilayah Pesawaran.
-// Batas tampilan akan diarahkan ke raster setelah berhasil dibaca.
-const map = L.map("map").setView([-5.60, 105.25], 12);
+const map = L.map("map").setView([-5.60,105.25],12);
 
 L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  {
-    attribution: "Tiles © Esri",
-    maxZoom: 19
-  }
+  {attribution:"Tiles © Esri",maxZoom:19}
 ).addTo(map);
 
 let rasterLayer = null;
-let currentRequest = 0;
+let requestNumber = 0;
 let excelRows = [];
 let excelHeaders = [];
 let excelReady = false;
 
-const $ = id => document.getElementById(id);
+const el = id => document.getElementById(id);
 
-function setStatus(message) {
-  $("status").textContent = message;
+function setStatus(message){
+  el("status").textContent = message;
 }
 
-function formatValue(value) {
-  if (value === null || value === undefined || value === "") return "—";
-  if (typeof value === "number") {
-    return value.toLocaleString("id-ID", { maximumFractionDigits: 4 });
+function displayValue(value){
+  if(value===null || value===undefined || value==="") return "—";
+  if(typeof value==="number"){
+    return value.toLocaleString("id-ID",{maximumFractionDigits:4});
   }
   return String(value);
 }
 
-function normalize(text) {
-  return String(text ?? "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, "");
+function norm(value){
+  return String(value??"").toLowerCase().replace(/[^a-z0-9]/g,"");
 }
 
-// Mencari kolom yang namanya mengandung istilah terkait.
-function findColumn(headers, candidates) {
-  return headers.find(h => {
-    const key = normalize(h);
-    return candidates.some(c => key.includes(normalize(c)));
+function findColumn(headers, candidates){
+  return headers.find(header=>{
+    const h=norm(header);
+    return candidates.some(c=>h.includes(norm(c)));
   });
 }
 
-function findYearColumn(headers) {
-  return findColumn(headers, ["tahun", "year"]);
+function getYearColumn(){
+  return findColumn(excelHeaders,["tahun","year"]);
 }
 
-function updateSummary(year) {
-  $("summaryYear").textContent = year;
+function getRowForYear(year){
+  const yearColumn=getYearColumn();
 
-  if (!excelReady) return;
-
-  const yearCol = findYearColumn(excelHeaders);
-  let row = null;
-
-  if (yearCol) {
-    row = excelRows.find(r =>
-      String(r[yearCol] ?? "").trim().slice(0, 4) === String(year)
+  if(yearColumn){
+    return excelRows.find(row=>
+      String(row[yearColumn]??"").trim().slice(0,4)===String(year)
     );
-  } else if (excelRows.length === YEARS.length) {
-    row = excelRows[YEARS.indexOf(Number(year))];
   }
 
-  if (!row) {
-    $("luas").textContent = "—";
-    $("ndvi").textContent = "—";
-    $("ndmi").textContent = "—";
-    $("mndwi").textContent = "—";
+  // Hanya gunakan urutan baris sebagai fallback jika tepat enam baris.
+  if(excelRows.length===6){
+    return excelRows[Number(year)-2021];
+  }
+  return null;
+}
+
+function updateSummary(year){
+  el("summaryYear").textContent=year;
+  if(!excelReady) return;
+
+  const row=getRowForYear(year);
+  if(!row){
+    ["luas","ndvi","ndmi","mndwi"].forEach(id=>el(id).textContent="—");
     return;
   }
 
-  const luasCol = findColumn(excelHeaders, ["luas"]);
-  const ndviCol = findColumn(excelHeaders, ["ndvi"]);
-  const ndmiCol = findColumn(excelHeaders, ["ndmi"]);
-  const mndwiCol = findColumn(excelHeaders, ["mndwi"]);
+  const columns={
+    luas:findColumn(excelHeaders,["luas"]),
+    ndvi:findColumn(excelHeaders,["ndvi"]),
+    ndmi:findColumn(excelHeaders,["ndmi"]),
+    mndwi:findColumn(excelHeaders,["mndwi"])
+  };
 
-  $("luas").textContent = luasCol ? formatValue(row[luasCol]) : "—";
-  $("ndvi").textContent = ndviCol ? formatValue(row[ndviCol]) : "—";
-  $("ndmi").textContent = ndmiCol ? formatValue(row[ndmiCol]) : "—";
-  $("mndwi").textContent = mndwiCol ? formatValue(row[mndwiCol]) : "—";
+  for(const id of Object.keys(columns)){
+    el(id).textContent=columns[id]?displayValue(row[columns[id]]):"—";
+  }
 }
 
-function renderTable(year) {
-  const head = $("tableHead");
-  const body = $("tableBody");
+function renderTable(year){
+  const head=el("tableHead");
+  const body=el("tableBody");
   head.replaceChildren();
   body.replaceChildren();
+  if(!excelReady) return;
 
-  if (!excelReady) return;
+  const yearColumn=getYearColumn();
+  let rows=excelRows;
 
-  const yearCol = findYearColumn(excelHeaders);
-  let rows = excelRows;
-
-  if (yearCol) {
-    rows = rows.filter(r =>
-      String(r[yearCol] ?? "").trim().slice(0, 4) === String(year)
+  if(yearColumn){
+    rows=excelRows.filter(row=>
+      String(row[yearColumn]??"").trim().slice(0,4)===String(year)
     );
-  } else if (excelRows.length === YEARS.length) {
-    rows = [excelRows[YEARS.indexOf(Number(year))]];
+  }else if(excelRows.length===6){
+    rows=[excelRows[Number(year)-2021]];
   }
 
-  const trHead = document.createElement("tr");
-  excelHeaders.forEach(h => {
-    const th = document.createElement("th");
-    th.textContent = h;
+  const trHead=document.createElement("tr");
+  excelHeaders.forEach(header=>{
+    const th=document.createElement("th");
+    th.textContent=header;
     trHead.appendChild(th);
   });
   head.appendChild(trHead);
 
-  if (!rows.length) {
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-    td.colSpan = excelHeaders.length || 1;
-    td.textContent = "Tidak ditemukan baris data untuk tahun " + year +
-      ". Periksa kolom Tahun di Excel.";
+  if(!rows.length){
+    const tr=document.createElement("tr");
+    const td=document.createElement("td");
+    td.colSpan=Math.max(1,excelHeaders.length);
+    td.textContent="Data tahun "+year+" tidak ditemukan. Periksa kolom Tahun pada Excel.";
     tr.appendChild(td);
     body.appendChild(tr);
     return;
   }
 
-  rows.forEach(row => {
-    const tr = document.createElement("tr");
-    excelHeaders.forEach(h => {
-      const td = document.createElement("td");
-      td.textContent = formatValue(row[h]);
+  rows.forEach(row=>{
+    const tr=document.createElement("tr");
+    excelHeaders.forEach(header=>{
+      const td=document.createElement("td");
+      td.textContent=displayValue(row[header]);
       tr.appendChild(td);
     });
     body.appendChild(tr);
   });
 }
 
-async function loadExcel() {
-  try {
-    $("excelStatus").textContent = "Memuat file Excel...";
+async function loadExcel(){
+  try{
+    el("excelStatus").textContent="Memuat file Excel...";
+    const response=await fetch(EXCEL_FILE+"?v="+Date.now());
 
-    const response = await fetch(EXCEL_FILE + "?v=" + Date.now());
-    if (!response.ok) {
-      throw new Error("HTTP " + response.status + " saat membaca Excel");
+    if(!response.ok){
+      throw new Error("HTTP "+response.status+" saat membuka Excel.");
     }
 
-    const buffer = await response.arrayBuffer();
-    const workbook = XLSX.read(buffer, { type: "array" });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const buffer=await response.arrayBuffer();
+    const workbook=XLSX.read(buffer,{type:"array"});
+    const sheet=workbook.Sheets[workbook.SheetNames[0]];
+    const data=XLSX.utils.sheet_to_json(sheet,{defval:"",raw:true});
 
-    const data = XLSX.utils.sheet_to_json(sheet, {
-      defval: "",
-      raw: true
-    });
+    if(!data.length) throw new Error("Sheet pertama kosong.");
 
-    if (!data.length) {
-      throw new Error("Sheet pertama kosong atau tidak memiliki baris data.");
-    }
+    excelRows=data;
+    excelHeaders=Object.keys(data[0]);
+    excelReady=true;
 
-    excelHeaders = Object.keys(data[0]);
-    excelRows = data;
-    excelReady = true;
+    el("excelStatus").textContent=
+      "Excel berhasil dibaca: "+workbook.SheetNames[0]+
+      " ("+data.length+" baris).";
 
-    $("excelStatus").textContent =
-      "Excel berhasil dibaca: " + workbook.SheetNames[0] +
-      " · " + excelRows.length + " baris data.";
-
-    updateSummary(Number($("yearSelect").value));
-    renderTable(Number($("yearSelect").value));
-  } catch (error) {
+    const year=Number(el("yearSelect").value);
+    updateSummary(year);
+    renderTable(year);
+  }catch(error){
     console.error(error);
-    $("excelStatus").textContent =
-      "Excel gagal dimuat. Pastikan nama file dan lokasi DATA benar. " +
-      error.message;
+    el("excelStatus").textContent=
+      "Excel gagal dibaca: "+error.message+
+      " Periksa nama file, lokasi DATA, dan apakah GitHub Pages sudah diperbarui.";
   }
 }
 
-async function loadRaster(year) {
-  const requestId = ++currentRequest;
-  $("activeYear").textContent = year;
-  setStatus("Memuat raster tahun " + year + "...");
+async function loadRaster(year){
+  const thisRequest=++requestNumber;
+  el("activeYear").textContent=year;
+  setStatus("Memuat raster tahun "+year+"...");
 
-  const rasterURL = DATA_FOLDER + "mangrove_" + year + ".tif?v=" + Date.now();
+  const url=DATA_FOLDER+"mangrove_"+year+".tif?v="+Date.now();
 
-  try {
-    // Mengambil file TIFF sesuai tahun yang dipilih.
-    const response = await fetch(rasterURL, { cache: "no-store" });
+  try{
+    const response=await fetch(url,{cache:"no-store"});
 
-    if (!response.ok) {
+    if(!response.ok){
       throw new Error(
-        "File tidak ditemukan atau gagal diakses (HTTP " +
-        response.status + "). Periksa DATA/mangrove_" + year + ".tif"
+        "HTTP "+response.status+
+        ". Periksa file DATA/mangrove_"+year+".tif."
       );
     }
 
-    const arrayBuffer = await response.arrayBuffer();
+    const buffer=await response.arrayBuffer();
+    if(thisRequest!==requestNumber) return;
 
-    if (requestId !== currentRequest) return;
+    const raster=await parseGeoraster(buffer);
+    if(thisRequest!==requestNumber) return;
 
-    // Parse TIFF menjadi GeoRaster.
-    const georaster = await parseGeoraster(arrayBuffer);
+    const noData=raster.noDataValue;
 
-    if (requestId !== currentRequest) return;
+    const newLayer=new GeoRasterLayer({
+      georaster:raster,
+      opacity:0.90,
+      resolution:256,
 
-    const newLayer = new GeoRasterLayer({
-      georaster: georaster,
-      opacity: 0.78,
-      resolution: 256,
-      pixelValuesToColorFn: values => {
-        const value = values && values[0];
+      pixelValuesToColorFn:function(values){
+        const value=values&&values[0];
 
-        if (value === null || value === undefined ||
-            !Number.isFinite(Number(value))) return null;
+        // Kosong/tidak valid: transparan.
+        if(value===null || value===undefined ||
+           !Number.isFinite(Number(value))) return null;
 
-        // Gradasi otomatis berdasarkan rentang nilai raster.
-        const min = Number(georaster.mins[0]);
-        const max = Number(georaster.maxs[0]);
-        const range = max - min;
-        const t = range === 0 ? 0.5 :
-          Math.max(0, Math.min(1, (Number(value) - min) / range));
+        // Nilai NoData: transparan.
+        if(noData!==null && noData!==undefined &&
+           Number(value)===Number(noData)) return null;
 
-        // Merah -> kuning -> hijau.
-        let r, g, b;
-        if (t < 0.5) {
-          const u = t * 2;
-          r = 215 + (254 - 215) * u;
-          g = 48 + (224 - 48) * u;
-          b = 39 + (139 - 39) * u;
-        } else {
-          const u = (t - 0.5) * 2;
-          r = 254 + (26 - 254) * u;
-          g = 224 + (152 - 224) * u;
-          b = 139 + (80 - 139) * u;
-        }
-        return `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
+        // Asumsi nilai 0 berarti area tanpa mangrove.
+        // Hapus kondisi ini jika 0 merupakan data valid.
+        if(Number(value)===0) return null;
+
+        // Tidak memakai gradasi merah.
+        return "#35a853";
       }
     });
 
-    // Hanya mengganti layer setelah raster baru berhasil diproses.
-    if (rasterLayer) map.removeLayer(rasterLayer);
-    rasterLayer = newLayer;
+    if(thisRequest!==requestNumber) return;
+
+    // Ganti layer hanya setelah raster baru berhasil dibaca.
+    if(rasterLayer) map.removeLayer(rasterLayer);
+    rasterLayer=newLayer;
     rasterLayer.addTo(map);
 
-    const bounds = rasterLayer.getBounds();
-    if (bounds && bounds.isValid()) {
-      map.fitBounds(bounds, { padding: [15, 15], maxZoom: 17 });
+    const bounds=rasterLayer.getBounds();
+    if(bounds && bounds.isValid()){
+      map.fitBounds(bounds,{padding:[15,15],maxZoom:17});
     }
 
     setStatus(
-      "Berhasil menampilkan raster tahun " + year +
-      " · file: DATA/mangrove_" + year + ".tif"
+      "Raster tahun "+year+" berhasil dimuat: DATA/mangrove_"+year+".tif"
     );
-  } catch (error) {
-    console.error("Raster error:", error);
-    if (requestId === currentRequest) {
+  }catch(error){
+    console.error("Raster error:",error);
+    if(thisRequest===requestNumber){
       setStatus(
-        "Gagal memuat raster tahun " + year + ". " + error.message +
-        " Pastikan file TIFF tersedia dan dapat diakses melalui GitHub Pages."
+        "Raster tahun "+year+" gagal dimuat. "+error.message+
+        " Jika gagal terus, periksa format TIFF dan ukuran file."
       );
     }
   }
 }
 
-function changeYear() {
-  const year = Number($("yearSelect").value);
+function changeYear(){
+  const year=Number(el("yearSelect").value);
   updateSummary(year);
   renderTable(year);
   loadRaster(year);
 }
 
-$("yearSelect").addEventListener("change", changeYear);
-$("reloadBtn").addEventListener("click", changeYear);
+el("yearSelect").addEventListener("change",changeYear);
+el("reloadBtn").addEventListener("click",changeYear);
 
-// Jalankan pertama kali.
 loadExcel();
 loadRaster(2021);
 </script>
