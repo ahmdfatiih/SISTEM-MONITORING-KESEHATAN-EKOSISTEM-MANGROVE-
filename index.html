@@ -1,364 +1,196 @@
+```javascript
+// ============================================================
+// WEBGIS EKOSISTEM MANGROVE DESA SIDODADI
+// KABUPATEN PESAWARAN, LAMPUNG
+// Tahun 2021–2026
+// Platform: Google Earth Engine Code Editor
+// ============================================================
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WebGIS Monitoring Kesehatan Mangrove</title>
+// 1. KONFIGURASI RASTER
+// GANTI setiap path dengan ID asset raster Anda yang sebenarnya.
+// Setiap tahun WAJIB mengarah ke file raster yang berbeda.
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+var rasterTahunan = {
+  '2021': 'projects/PROJECT_ANDA/assets/mangrove_2021',
+  '2022': 'projects/PROJECT_ANDA/assets/mangrove_2022',
+  '2023': 'projects/PROJECT_ANDA/assets/mangrove_2023',
+  '2024': 'projects/PROJECT_ANDA/assets/mangrove_2024',
+  '2025': 'projects/PROJECT_ANDA/assets/mangrove_2025',
+  '2026': 'projects/PROJECT_ANDA/assets/mangrove_2026'
+};
 
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f7f4;color:#203c30}
-header{background:#145c43;color:white;padding:20px}
-header h1{margin:0 0 8px;font-size:24px}
-main{max-width:1400px;margin:auto;padding:16px}
-.panel{background:white;padding:16px;margin-bottom:16px;border-radius:12px;box-shadow:0 2px 8px #0001}
-.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-select,button{padding:10px 14px;border:1px solid #b9cbc1;border-radius:7px;font-size:15px}
-button{background:#16744f;color:white;cursor:pointer;border:0}
-#map{height:65vh;min-height:360px;border-radius:10px;background:#e2ebe5}
-.status{margin-top:12px;padding:10px;background:#eef5f0;border-radius:7px;overflow-wrap:anywhere}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.stat{background:#f0f7f2;padding:14px;border-radius:8px;overflow-wrap:anywhere}
-.stat strong{display:block;font-size:21px;margin-top:8px}
-.table-wrap{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:14px}
-th,td{padding:10px;border:1px solid #dce6df;text-align:left;white-space:nowrap}
-th{background:#e8f2eb}
-.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:13px}
-.dot{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px}
-footer{text-align:center;padding:20px;color:#60776b}
-@media(max-width:700px){
- header h1{font-size:20px}
- .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
- #map{height:55vh;min-height:320px}
-}
-</style>
-</head>
+// 2. KONFIGURASI TAMPILAN RASTER
+// Sesuaikan min, max, dan palette dengan indeks raster Anda.
+// Contoh ini untuk raster indeks kontinu bernilai -1 sampai 1.
 
-<body>
-<header>
-  <h1>WebGIS Monitoring Kesehatan Ekosistem Mangrove</h1>
-  <div>Desa Sidodadi, Kabupaten Pesawaran, Provinsi Lampung</div>
-  <div>Monitoring tahun 2021–2026</div>
-</header>
+var visualisasi = {
+  min: -1,
+  max: 1,
+  palette: [
+    '8c510a',
+    'd8b365',
+    'f6e8c3',
+    'c7eae5',
+    '5ab4ac',
+    '01665e'
+  ]
+};
 
-<main>
-<section class="panel">
-  <h2>Pilih Tahun Pengamatan</h2>
-  <div class="controls">
-    <label for="yearSelect">Tahun:</label>
-    <select id="yearSelect">
-      <option>2021</option><option>2022</option><option>2023</option>
-      <option>2024</option><option>2025</option><option>2026</option>
-    </select>
-    <button id="reloadBtn">Muat Ulang Raster</button>
-  </div>
-  <div id="status" class="status">Menyiapkan peta...</div>
-</section>
+// 3. DATA INDEKS KESEHATAN MANGROVE
+// GANTI angka contoh di bawah dengan hasil analisis Anda.
+// Jangan gunakan angka contoh untuk kesimpulan penelitian.
 
-<section class="panel">
-  <h2>Peta Sebaran Mangrove <span id="activeYear">2021</span></h2>
-  <div id="map"></div>
-  <div class="legend">
-    <span><i class="dot" style="background:#35a853"></i>Piksel data ditampilkan</span>
-    <span>Area transparan = tidak ditampilkan</span>
-  </div>
-  <p style="font-size:13px;color:#60776b">
-    Warna hijau hanya menunjukkan piksel raster valid, bukan klasifikasi kesehatan resmi.
-  </p>
-</section>
+var dataKesehatan = [
+  {tahun: '2021', luas: '-', indeks: '-', kategori: 'Isi data'},
+  {tahun: '2022', luas: '-', indeks: '-', kategori: 'Isi data'},
+  {tahun: '2023', luas: '-', indeks: '-', kategori: 'Isi data'},
+  {tahun: '2024', luas: '-', indeks: '-', kategori: 'Isi data'},
+  {tahun: '2025', luas: '-', indeks: '-', kategori: 'Isi data'},
+  {tahun: '2026', luas: '-', indeks: '-', kategori: 'Isi data'}
+];
 
-<section class="panel">
-  <h2>Ringkasan Data Tahun <span id="summaryYear">2021</span></h2>
-  <div class="stats">
-    <div class="stat">Luas<strong id="luas">—</strong></div>
-    <div class="stat">NDVI<strong id="ndvi">—</strong></div>
-    <div class="stat">NDMI<strong id="ndmi">—</strong></div>
-    <div class="stat">MNDWI<strong id="mndwi">—</strong></div>
-  </div>
-</section>
+// 4. PETA DAN BASEMAP
+Map.setOptions('SATELLITE');
+Map.setCenter(105.20, -5.58, 13);
 
-<section class="panel">
-  <h2>Tabel Data Excel</h2>
-  <p id="excelStatus">Membaca Excel...</p>
-  <div class="table-wrap">
-    <table>
-      <thead id="tableHead"></thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-</section>
-</main>
+// Ganti koordinat pusat jika diperlukan agar tepat di lokasi penelitian.
 
-<footer>WebGIS Mangrove · 2021–2026</footer>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/georaster"></script>
-<script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
-<script>
-"use strict";
-
-// ==================================================
-// NAMA FILE HARUS SESUAI DENGAN REPOSITORY GITHUB
-// ==================================================
-const DATA_FOLDER = "./DATA/";
-const EXCEL_FILE = DATA_FOLDER + "NILAI%20INDEKS%20KEMKER%20(1).xlsx";
-
-const map = L.map("map").setView([-5.60,105.25],12);
-
-L.tileLayer(
-  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  {attribution:"Tiles © Esri",maxZoom:19}
-).addTo(map);
-
-let rasterLayer = null;
-let requestNumber = 0;
-let excelRows = [];
-let excelHeaders = [];
-let excelReady = false;
-
-const el = id => document.getElementById(id);
-
-function setStatus(message){
-  el("status").textContent = message;
-}
-
-function displayValue(value){
-  if(value===null || value===undefined || value==="") return "—";
-  if(typeof value==="number"){
-    return value.toLocaleString("id-ID",{maximumFractionDigits:4});
+// 5. PANEL WEBGIS
+var panel = ui.Panel({
+  style: {
+    width: '350px',
+    padding: '12px'
   }
-  return String(value);
-}
+});
 
-function norm(value){
-  return String(value??"").toLowerCase().replace(/[^a-z0-9]/g,"");
-}
+panel.add(ui.Label('WEBGIS EKOSISTEM MANGROVE', {
+  fontSize: '20px',
+  fontWeight: 'bold'
+}));
 
-function findColumn(headers, candidates){
-  return headers.find(header=>{
-    const h=norm(header);
-    return candidates.some(c=>h.includes(norm(c)));
-  });
-}
+panel.add(ui.Label(
+  'Desa Sidodadi, Kabupaten Pesawaran, Lampung',
+  {fontSize: '12px'}
+));
 
-function getYearColumn(){
-  return findColumn(excelHeaders,["tahun","year"]);
-}
+panel.add(ui.Label('Pilih tahun pengamatan:', {
+  fontWeight: 'bold',
+  margin: '18px 0 5px 0'
+}));
 
-function getRowForYear(year){
-  const yearColumn=getYearColumn();
+var pilihanTahun = ui.Select({
+  items: ['2021', '2022', '2023', '2024', '2025', '2026'],
+  value: '2021',
+  style: {stretch: 'horizontal'}
+});
 
-  if(yearColumn){
-    return excelRows.find(row=>
-      String(row[yearColumn]??"").trim().slice(0,4)===String(year)
-    );
-  }
+panel.add(pilihanTahun);
 
-  // Hanya gunakan urutan baris sebagai fallback jika tepat enam baris.
-  if(excelRows.length===6){
-    return excelRows[Number(year)-2021];
-  }
-  return null;
-}
+var status = ui.Label('Memuat raster...', {
+  color: 'blue',
+  margin: '8px 0'
+});
+panel.add(status);
 
-function updateSummary(year){
-  el("summaryYear").textContent=year;
-  if(!excelReady) return;
+panel.add(ui.Label('Indeks Kesehatan Mangrove', {
+  fontWeight: 'bold',
+  margin: '15px 0 5px 0'
+}));
 
-  const row=getRowForYear(year);
-  if(!row){
-    ["luas","ndvi","ndmi","mndwi"].forEach(id=>el(id).textContent="—");
-    return;
-  }
+var tabel = ui.Panel();
+panel.add(tabel);
 
-  const columns={
-    luas:findColumn(excelHeaders,["luas"]),
-    ndvi:findColumn(excelHeaders,["ndvi"]),
-    ndmi:findColumn(excelHeaders,["ndmi"]),
-    mndwi:findColumn(excelHeaders,["mndwi"])
-  };
+// 6. FUNGSI PERGANTIAN RASTER
+function tampilkanTahun(tahun) {
 
-  for(const id of Object.keys(columns)){
-    el(id).textContent=columns[id]?displayValue(row[columns[id]]):"—";
-  }
-}
+  // Hapus layer raster sebelumnya agar tidak menumpuk.
+  Map.layers().reset();
 
-function renderTable(year){
-  const head=el("tableHead");
-  const body=el("tableBody");
-  head.replaceChildren();
-  body.replaceChildren();
-  if(!excelReady) return;
+  // Basemap tetap menggunakan SATELLITE.
+  Map.setOptions('SATELLITE');
 
-  const yearColumn=getYearColumn();
-  let rows=excelRows;
+  var assetID = rasterTahunan[tahun];
 
-  if(yearColumn){
-    rows=excelRows.filter(row=>
-      String(row[yearColumn]??"").trim().slice(0,4)===String(year)
-    );
-  }else if(excelRows.length===6){
-    rows=[excelRows[Number(year)-2021]];
-  }
+  status.setValue('Memuat raster tahun ' + tahun + '...');
+  status.style().set('color', 'blue');
 
-  const trHead=document.createElement("tr");
-  excelHeaders.forEach(header=>{
-    const th=document.createElement("th");
-    th.textContent=header;
-    trHead.appendChild(th);
-  });
-  head.appendChild(trHead);
+  // Ambil raster sesuai pilihan tahun.
+  var raster = ee.Image(assetID);
 
-  if(!rows.length){
-    const tr=document.createElement("tr");
-    const td=document.createElement("td");
-    td.colSpan=Math.max(1,excelHeaders.length);
-    td.textContent="Data tahun "+year+" tidak ditemukan. Periksa kolom Tahun pada Excel.";
-    tr.appendChild(td);
-    body.appendChild(tr);
-    return;
-  }
+  // Cek apakah asset dapat diakses dan memiliki band.
+  raster.bandNames().evaluate(function(bands, error) {
 
-  rows.forEach(row=>{
-    const tr=document.createElement("tr");
-    excelHeaders.forEach(header=>{
-      const td=document.createElement("td");
-      td.textContent=displayValue(row[header]);
-      tr.appendChild(td);
-    });
-    body.appendChild(tr);
-  });
-}
-
-async function loadExcel(){
-  try{
-    el("excelStatus").textContent="Memuat file Excel...";
-    const response=await fetch(EXCEL_FILE+"?v="+Date.now());
-
-    if(!response.ok){
-      throw new Error("HTTP "+response.status+" saat membuka Excel.");
-    }
-
-    const buffer=await response.arrayBuffer();
-    const workbook=XLSX.read(buffer,{type:"array"});
-    const sheet=workbook.Sheets[workbook.SheetNames[0]];
-    const data=XLSX.utils.sheet_to_json(sheet,{defval:"",raw:true});
-
-    if(!data.length) throw new Error("Sheet pertama kosong.");
-
-    excelRows=data;
-    excelHeaders=Object.keys(data[0]);
-    excelReady=true;
-
-    el("excelStatus").textContent=
-      "Excel berhasil dibaca: "+workbook.SheetNames[0]+
-      " ("+data.length+" baris).";
-
-    const year=Number(el("yearSelect").value);
-    updateSummary(year);
-    renderTable(year);
-  }catch(error){
-    console.error(error);
-    el("excelStatus").textContent=
-      "Excel gagal dibaca: "+error.message+
-      " Periksa nama file, lokasi DATA, dan apakah GitHub Pages sudah diperbarui.";
-  }
-}
-
-async function loadRaster(year){
-  const thisRequest=++requestNumber;
-  el("activeYear").textContent=year;
-  setStatus("Memuat raster tahun "+year+"...");
-
-  const url=DATA_FOLDER+"mangrove_"+year+".tif?v="+Date.now();
-
-  try{
-    const response=await fetch(url,{cache:"no-store"});
-
-    if(!response.ok){
-      throw new Error(
-        "HTTP "+response.status+
-        ". Periksa file DATA/mangrove_"+year+".tif."
+    if (error || !bands || bands.length === 0) {
+      status.setValue(
+        'Raster ' + tahun +
+        ' tidak tersedia. Periksa ID asset dan izin akses.'
       );
+      status.style().set('color', 'red');
+      return;
     }
 
-    const buffer=await response.arrayBuffer();
-    if(thisRequest!==requestNumber) return;
-
-    const raster=await parseGeoraster(buffer);
-    if(thisRequest!==requestNumber) return;
-
-    const noData=raster.noDataValue;
-
-    const newLayer=new GeoRasterLayer({
-      georaster:raster,
-      opacity:0.90,
-      resolution:256,
-
-      pixelValuesToColorFn:function(values){
-        const value=values&&values[0];
-
-        // Kosong/tidak valid: transparan.
-        if(value===null || value===undefined ||
-           !Number.isFinite(Number(value))) return null;
-
-        // Nilai NoData: transparan.
-        if(noData!==null && noData!==undefined &&
-           Number(value)===Number(noData)) return null;
-
-        // Asumsi nilai 0 berarti area tanpa mangrove.
-        // Hapus kondisi ini jika 0 merupakan data valid.
-        if(Number(value)===0) return null;
-
-        // Tidak memakai gradasi merah.
-        return "#35a853";
-      }
-    });
-
-    if(thisRequest!==requestNumber) return;
-
-    // Ganti layer hanya setelah raster baru berhasil dibaca.
-    if(rasterLayer) map.removeLayer(rasterLayer);
-    rasterLayer=newLayer;
-    rasterLayer.addTo(map);
-
-    const bounds=rasterLayer.getBounds();
-    if(bounds && bounds.isValid()){
-      map.fitBounds(bounds,{padding:[15,15],maxZoom:17});
-    }
-
-    setStatus(
-      "Raster tahun "+year+" berhasil dimuat: DATA/mangrove_"+year+".tif"
+    // Tampilkan raster tahun terpilih.
+    Map.addLayer(
+      raster,
+      visualisasi,
+      'Mangrove ' + tahun,
+      true
     );
-  }catch(error){
-    console.error("Raster error:",error);
-    if(thisRequest===requestNumber){
-      setStatus(
-        "Raster tahun "+year+" gagal dimuat. "+error.message+
-        " Jika gagal terus, periksa format TIFF dan ukuran file."
-      );
+
+    status.setValue(
+      'Raster aktif: ' + tahun +
+      ' | Band: ' + bands.join(', ')
+    );
+    status.style().set('color', 'green');
+  });
+
+  // Perbarui tabel indeks kesehatan sesuai tahun.
+  tabel.clear();
+
+  tabel.add(ui.Label(
+    'Data indeks kesehatan tahun ' + tahun,
+    {fontWeight: 'bold'}
+  ));
+
+  tabel.add(ui.Label(
+    'Tahun | Luas | Indeks | Kategori',
+    {fontWeight: 'bold'}
+  ));
+
+  var ditemukan = false;
+
+  dataKesehatan.forEach(function(d) {
+    if (d.tahun === tahun) {
+      ditemukan = true;
+
+      tabel.add(ui.Label(
+        d.tahun + ' | ' + d.luas + ' | ' +
+        d.indeks + ' | ' + d.kategori,
+        {fontSize: '11px'}
+      ));
     }
+  });
+
+  if (!ditemukan) {
+    tabel.add(ui.Label('Data belum tersedia.'));
   }
 }
 
-function changeYear(){
-  const year=Number(el("yearSelect").value);
-  updateSummary(year);
-  renderTable(year);
-  loadRaster(year);
-}
+// 7. HUBUNGKAN PILIHAN TAHUN DENGAN PETA
+pilihanTahun.onChange(function(tahun) {
+  tampilkanTahun(tahun);
+});
 
-el("yearSelect").addEventListener("change",changeYear);
-el("reloadBtn").addEventListener("click",changeYear);
+// 8. TAMPILKAN TAHUN AWAL
+ui.root.clear();
 
-loadExcel();
-loadRaster(2021);
-</script>
-</body>
-</html>
+ui.root.add(ui.SplitPanel({
+  firstPanel: panel,
+  secondPanel: Map,
+  orientation: 'horizontal',
+  wipe: false,
+  style: {stretch: 'both'}
+}));
+
+tampilkanTahun('2021');
+```
