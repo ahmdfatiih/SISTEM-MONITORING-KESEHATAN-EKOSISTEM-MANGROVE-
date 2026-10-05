@@ -29,62 +29,22 @@ body{
     color:#222;
 }
 
-
-/* =====================================================
-HEADER
-===================================================== */
+/* ================= HEADER ================= */
 
 .header{
-    height:82px;
+    height:72px;
     background:#0d4f36;
     color:white;
 
     display:flex;
     align-items:center;
-    justify-content:space-between;
 
-    padding:0 22px;
+    padding:0 25px;
 
     box-shadow:0 2px 8px rgba(0,0,0,.25);
 
     position:relative;
     z-index:1000;
-}
-
-
-/* ================= LOGO KIRI ================= */
-
-.header-left{
-    width:270px;
-
-    display:flex;
-    align-items:center;
-
-    gap:10px;
-}
-
-.header-left img{
-    height:58px;
-    width:auto;
-
-    object-fit:contain;
-
-    background:white;
-
-    padding:3px;
-
-    border-radius:5px;
-}
-
-
-/* ================= JUDUL ================= */
-
-.header-center{
-    flex:1;
-
-    text-align:center;
-
-    padding:0 15px;
 }
 
 .header-title{
@@ -98,34 +58,12 @@ HEADER
     opacity:.85;
 }
 
-
-/* ================= LOGO KANAN ================= */
-
-.header-right{
-    width:270px;
-
-    display:flex;
-
-    justify-content:flex-end;
-
-    align-items:center;
-}
-
-.header-right img{
-    height:62px;
-    width:auto;
-
-    object-fit:contain;
-}
-
-
 /* ================= LAYOUT ================= */
 
 .container{
     display:flex;
-    height:calc(100vh - 82px);
+    height:calc(100vh - 72px);
 }
-
 
 /* ================= SIDEBAR ================= */
 
@@ -158,7 +96,6 @@ HEADER
 
     letter-spacing:.4px;
 }
-
 
 /* ================= YEAR ================= */
 
@@ -201,7 +138,6 @@ HEADER
 
     border-color:#0d4f36;
 }
-
 
 /* ================= STATUS ================= */
 
@@ -261,7 +197,6 @@ HEADER
     display:block;
 }
 
-
 /* ================= LEGEND ================= */
 
 .legend-item{
@@ -284,7 +219,6 @@ HEADER
 
     border:1px solid rgba(0,0,0,.15);
 }
-
 
 /* ================= STAT TABLE ================= */
 
@@ -325,7 +259,6 @@ HEADER
 
     text-align:left;
 }
-
 
 /* ================= LUAS ================= */
 
@@ -371,7 +304,6 @@ HEADER
     color:#666;
 }
 
-
 /* ================= CHART ================= */
 
 .chart-container{
@@ -381,7 +313,6 @@ HEADER
 
     position:relative;
 }
-
 
 /* ================= INFO ================= */
 
@@ -399,7 +330,6 @@ HEADER
     line-height:1.6;
 }
 
-
 /* ================= MAP ================= */
 
 #map{
@@ -409,7 +339,6 @@ HEADER
 
     min-width:0;
 }
-
 
 /* ================= POPUP ================= */
 
@@ -437,7 +366,6 @@ HEADER
     margin-top:3px;
 }
 
-
 /* ================= MOBILE ================= */
 
 @media(max-width:800px){
@@ -460,22 +388,6 @@ HEADER
         font-size:16px;
     }
 
-    .header-left{
-        width:130px;
-    }
-
-    .header-left img{
-        height:42px;
-    }
-
-    .header-right{
-        width:130px;
-    }
-
-    .header-right img{
-        height:45px;
-    }
-
 }
 
 </style>
@@ -491,50 +403,17 @@ HEADER
 
 <div class="header">
 
+    <div>
 
-<!-- ================= LOGO KIRI ================= -->
+        <div class="header-title">
+            SISTEM MONITORING KESEHATAN EKOSISTEM MANGROVE
+        </div>
 
-<div class="header-left">
+        <div class="header-subtitle">
+            Desa Sidodadi, Kabupaten Pesawaran, Lampung
+        </div>
 
-    <img
-        src="LOGO/logo-itera.jpg"
-        alt="Logo Institut Teknologi Sumatera"
-    >
-
-    <img
-        src="LOGO/logo-geomatika.jpg"
-        alt="Logo Teknik Geomatika"
-    >
-
-</div>
-
-
-<!-- ================= JUDUL ================= -->
-
-<div class="header-center">
-
-    <div class="header-title">
-        SISTEM MONITORING KESEHATAN EKOSISTEM MANGROVE
     </div>
-
-    <div class="header-subtitle">
-        Desa Sidodadi, Kabupaten Pesawaran, Lampung
-    </div>
-
-</div>
-
-
-<!-- ================= LOGO KANAN ================= -->
-
-<div class="header-right">
-
-    <img
-        src="LOGO/logo-kemker.png"
-        alt="Logo Kemker"
-    >
-
-</div>
-
 
 </div>
 
