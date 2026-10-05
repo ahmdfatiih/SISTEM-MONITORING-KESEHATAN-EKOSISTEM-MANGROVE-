@@ -35,14 +35,14 @@ body {
 /* ================= HEADER ================= */
 
 .header {
-    height: 82px;
+    height: 72px;
     background: #0d4f36;
     color: white;
 
     display: flex;
     align-items: center;
 
-    padding: 0 22px;
+    padding: 0 25px;
 
     box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 
@@ -50,40 +50,28 @@ body {
     z-index: 1000;
 }
 
-/* ================= LOGO KIRI ================= */
+/* ================= LOGO HEADER ================= */
+/* TAMBAHAN LOGO SAJA */
 
-.header-logo-left {
-    width: 270px;
-
+.header-logos {
     display: flex;
     align-items: center;
-
     gap: 10px;
-
     flex-shrink: 0;
 }
 
-.header-logo-left img {
-    height: 58px;
+.header-logos img {
+    height: 50px;
     width: auto;
-
     object-fit: contain;
-
-    background: white;
-
-    padding: 3px;
-
-    border-radius: 5px;
+    display: block;
+    background: transparent;
 }
 
-/* ================= JUDUL TENGAH ================= */
+/* ================= JUDUL HEADER ================= */
 
-.header-center {
-    flex: 1;
-
-    text-align: center;
-
-    padding: 0 15px;
+.header-content {
+    margin-left: 18px;
 }
 
 .header-title {
@@ -98,33 +86,11 @@ body {
     opacity: 0.85;
 }
 
-/* ================= LOGO KANAN ================= */
-
-.header-logo-right {
-    width: 270px;
-
-    display: flex;
-
-    justify-content: flex-end;
-
-    align-items: center;
-
-    flex-shrink: 0;
-}
-
-.header-logo-right img {
-    height: 62px;
-
-    width: auto;
-
-    object-fit: contain;
-}
-
 /* ================= LAYOUT ================= */
 
 .container {
     display: flex;
-    height: calc(100vh - 82px);
+    height: calc(100vh - 72px);
 }
 
 /* ================= SIDEBAR ================= */
@@ -391,40 +357,26 @@ body {
         height: 55vh;
     }
 
+    .header-title {
+        font-size: 17px;
+    }
+
+    /* TAMBAHAN LOGO UNTUK MOBILE */
+
     .header {
-        height: 82px;
-
-        padding: 0 10px;
+        padding: 0 12px;
     }
 
-    .header-logo-left {
-        width: auto;
-
-        gap: 4px;
+    .header-logos {
+        gap: 5px;
     }
 
-    .header-logo-left img {
+    .header-logos img {
         height: 38px;
     }
 
-    .header-logo-right {
-        width: auto;
-    }
-
-    .header-logo-right img {
-        height: 42px;
-    }
-
-    .header-center {
-        padding: 0 5px;
-    }
-
-    .header-title {
-        font-size: 13px;
-    }
-
-    .header-subtitle {
-        font-size: 9px;
+    .header-content {
+        margin-left: 10px;
     }
 
 }
@@ -442,9 +394,9 @@ body {
 
 <div class="header">
 
-    <!-- LOGO ITERA + GEOMATIKA -->
+    <!-- LOGO DI KIRI ATAS -->
 
-    <div class="header-logo-left">
+    <div class="header-logos">
 
         <img
             src="LOGO/logo-itera.png"
@@ -456,12 +408,17 @@ body {
             alt="Logo Teknik Geomatika"
         >
 
+        <img
+            src="LOGO/logo-kemker.png"
+            alt="Logo Kemker"
+        >
+
     </div>
 
 
     <!-- JUDUL -->
 
-    <div class="header-center">
+    <div class="header-content">
 
         <div class="header-title">
             SISTEM MONITORING KESEHATAN EKOSISTEM MANGROVE
@@ -470,18 +427,6 @@ body {
         <div class="header-subtitle">
             Desa Sidodadi, Kabupaten Pesawaran, Lampung
         </div>
-
-    </div>
-
-
-    <!-- LOGO KEMKER -->
-
-    <div class="header-logo-right">
-
-        <img
-            src="LOGO/logo-kemker.png"
-            alt="Logo Kemker"
-        >
 
     </div>
 
@@ -1337,7 +1282,7 @@ async function loadYear(year) {
         /* =================================================
            PENTING:
            TIDAK ADA map.fitBounds()
-           
+
            Sehingga posisi dan zoom pengguna
            TETAP dipertahankan ketika mengganti tahun.
         ================================================= */
