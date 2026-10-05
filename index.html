@@ -35,19 +35,55 @@ body {
 /* ================= HEADER ================= */
 
 .header {
-    height: 72px;
+    height: 82px;
     background: #0d4f36;
     color: white;
 
     display: flex;
     align-items: center;
 
-    padding: 0 25px;
+    padding: 0 22px;
 
     box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 
     position: relative;
     z-index: 1000;
+}
+
+/* ================= LOGO KIRI ================= */
+
+.header-logo-left {
+    width: 270px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+.header-logo-left img {
+    height: 58px;
+    width: auto;
+
+    object-fit: contain;
+
+    background: white;
+
+    padding: 3px;
+
+    border-radius: 5px;
+}
+
+/* ================= JUDUL TENGAH ================= */
+
+.header-center {
+    flex: 1;
+
+    text-align: center;
+
+    padding: 0 15px;
 }
 
 .header-title {
@@ -62,11 +98,33 @@ body {
     opacity: 0.85;
 }
 
+/* ================= LOGO KANAN ================= */
+
+.header-logo-right {
+    width: 270px;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    flex-shrink: 0;
+}
+
+.header-logo-right img {
+    height: 62px;
+
+    width: auto;
+
+    object-fit: contain;
+}
+
 /* ================= LAYOUT ================= */
 
 .container {
     display: flex;
-    height: calc(100vh - 72px);
+    height: calc(100vh - 82px);
 }
 
 /* ================= SIDEBAR ================= */
@@ -333,8 +391,40 @@ body {
         height: 55vh;
     }
 
+    .header {
+        height: 82px;
+
+        padding: 0 10px;
+    }
+
+    .header-logo-left {
+        width: auto;
+
+        gap: 4px;
+    }
+
+    .header-logo-left img {
+        height: 38px;
+    }
+
+    .header-logo-right {
+        width: auto;
+    }
+
+    .header-logo-right img {
+        height: 42px;
+    }
+
+    .header-center {
+        padding: 0 5px;
+    }
+
     .header-title {
-        font-size: 17px;
+        font-size: 13px;
+    }
+
+    .header-subtitle {
+        font-size: 9px;
     }
 
 }
@@ -352,7 +442,26 @@ body {
 
 <div class="header">
 
-    <div>
+    <!-- LOGO ITERA + GEOMATIKA -->
+
+    <div class="header-logo-left">
+
+        <img
+            src="LOGO/logo-itera.png"
+            alt="Logo ITERA"
+        >
+
+        <img
+            src="LOGO/logo-geomatika.png"
+            alt="Logo Teknik Geomatika"
+        >
+
+    </div>
+
+
+    <!-- JUDUL -->
+
+    <div class="header-center">
 
         <div class="header-title">
             SISTEM MONITORING KESEHATAN EKOSISTEM MANGROVE
@@ -361,6 +470,18 @@ body {
         <div class="header-subtitle">
             Desa Sidodadi, Kabupaten Pesawaran, Lampung
         </div>
+
+    </div>
+
+
+    <!-- LOGO KEMKER -->
+
+    <div class="header-logo-right">
+
+        <img
+            src="LOGO/logo-kemker.png"
+            alt="Logo Kemker"
+        >
 
     </div>
 
