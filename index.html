@@ -301,6 +301,45 @@ body {
     line-height: 1.6;
 }
 
+/* ================= STATISTIK INDEKS ================= */
+
+.index-box {
+    background: #f7f9f8;
+    border: 1px solid #dce5e0;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 12px;
+}
+
+.index-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid #e1e7e3;
+}
+
+.index-row:last-child {
+    border-bottom: none;
+}
+
+.index-label {
+    font-weight: bold;
+    color: #315347;
+}
+
+.index-value {
+    text-align: right;
+    color: #222;
+}
+
+.index-sub {
+    display: block;
+    font-size: 11px;
+    color: #777;
+    margin-top: 2px;
+}
+
 /* ================= MAP ================= */
 
 #map {
@@ -531,6 +570,46 @@ body {
         <div
             id="error"
             class="error">
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= STATISTIK INDEKS ================= -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Statistik Indeks
+        </div>
+
+        <div id="index-stats" class="index-box">
+
+            <div class="index-row">
+                <div class="index-label">NDVI</div>
+                <div class="index-value" id="ndvi-stat">-</div>
+            </div>
+
+            <div class="index-row">
+                <div class="index-label">NDMI</div>
+                <div class="index-value" id="ndmi-stat">-</div>
+            </div>
+
+            <div class="index-row">
+                <div class="index-label">MNDWI</div>
+                <div class="index-value" id="mndwi-stat">-</div>
+            </div>
+
+            <div class="index-row">
+                <div class="index-label">Kesehatan</div>
+                <div class="index-value" id="health-stat">-</div>
+            </div>
+
+            <div class="index-row">
+                <div class="index-label">Luas Mangrove</div>
+                <div class="index-value" id="area-stat">-</div>
+            </div>
 
         </div>
 
@@ -772,6 +851,100 @@ const DATA = {
     2026: "DATA/mangrove_2026.geojson"
 
 };
+
+
+/* ======================================================
+   DATA EXCEL INDEKS KEMKER
+   Data disimpan persis sesuai file Excel.
+====================================================== */
+
+const INDEX_DATA = {
+
+    2021: {
+        ndvi: { min: -0.134827, mean: 0.707075, max: 0.845614 },
+        ndmi: { min: 0.048521, mean: 0.574898, max: 0.739065 },
+        mndwi: { min: -0.417249, mean: -0.050756, max: 0.569343 },
+        health: { min: 1.9, mean: 3.971115, max: 4.6 },
+        area_m2: 165542.41728,
+        area_ha: 16.554242
+    },
+
+    2022: {
+        ndvi: { min: -0.212834, mean: 0.723201, max: 0.869265 },
+        ndmi: { min: 0.116719, mean: 0.605168, max: 0.761134 },
+        mndwi: { min: -0.463054, mean: -0.058475, max: 0.737318 },
+        health: { min: 2.4, mean: 4.089479, max: 4.8 },
+        area_m2: 162604.312032,
+        area_ha: 16.260431
+    },
+
+    2023: {
+        ndvi: { min: -0.135593, mean: 0.697285, max: 0.870698 },
+        ndmi: { min: 0.072883, mean: 0.515078, max: 0.667892 },
+        mndwi: { min: -0.530296, mean: -0.17994, max: 0.472539 },
+        health: { min: 1.9, mean: 3.73808, max: 4.6 },
+        area_m2: 179773.979606,
+        area_ha: 17.916599
+    },
+
+    2024: {
+        ndvi: { min: -0.072817, mean: 0.629488, max: 0.828971 },
+        ndmi: { min: 0.168385, mean: 0.527585, max: 0.709512 },
+        mndwi: { min: -0.382642, mean: -0.019543, max: 0.589969 },
+        health: { min: 1.9, mean: 3.73213, max: 4.6 },
+        area_m2: 205957.46097,
+        area_ha: 20.595746
+    },
+
+    2025: {
+        ndvi: { min: -0.402383, mean: 0.792577, max: 0.921957 },
+        ndmi: { min: 0.097053, mean: 0.605455, max: 0.766493 },
+        mndwi: { min: -0.575825, mean: -0.171922, max: 0.7416 },
+        health: { min: 1.9, mean: 4.178708, max: 4.8 },
+        area_m2: 203191.914403,
+        area_ha: 20.319191
+    },
+
+    2026: {
+        ndvi: { min: -0.269734, mean: 0.814195, max: 0.934173 },
+        ndmi: { min: 0.034079, mean: 0.607921, max: -0.779119 },
+        mndwi: { min: -0.594947, mean: 0.246855, max: 0.71473 },
+        health: { min: 1.9, mean: 4.148832, max: 4.8 },
+        area_m2: 190584.613695,
+        area_ha: 19.058461
+    }
+
+};
+
+
+/* ======================================================
+   UPDATE STATISTIK INDEKS
+====================================================== */
+
+function updateIndexData(year) {
+
+    const data = INDEX_DATA[year];
+
+    if (!data) {
+        return;
+    }
+
+    document.getElementById("ndvi-stat").innerHTML =
+        `Min: ${data.ndvi.min.toFixed(6)}<span class="index-sub">Mean: ${data.ndvi.mean.toFixed(6)} | Max: ${data.ndvi.max.toFixed(6)}</span>`;
+
+    document.getElementById("ndmi-stat").innerHTML =
+        `Min: ${data.ndmi.min.toFixed(6)}<span class="index-sub">Mean: ${data.ndmi.mean.toFixed(6)} | Max: ${data.ndmi.max.toFixed(6)}</span>`;
+
+    document.getElementById("mndwi-stat").innerHTML =
+        `Min: ${data.mndwi.min.toFixed(6)}<span class="index-sub">Mean: ${data.mndwi.mean.toFixed(6)} | Max: ${data.mndwi.max.toFixed(6)}</span>`;
+
+    document.getElementById("health-stat").innerHTML =
+        `Min: ${data.health.min.toFixed(1)}<span class="index-sub">Mean: ${data.health.mean.toFixed(6)} | Max: ${data.health.max.toFixed(1)}</span>`;
+
+    document.getElementById("area-stat").innerHTML =
+        `${data.area_ha.toFixed(6)} ha<span class="index-sub">${data.area_m2.toFixed(6)} m²</span>`;
+
+}
 
 
 /* ======================================================
@@ -1343,6 +1516,9 @@ async function loadYear(year) {
         /* ==============================
            STATUS
         ============================== */
+
+        updateIndexData(year);
+
 
         status.innerHTML = `
 
