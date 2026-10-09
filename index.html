@@ -992,37 +992,20 @@ const CLASS_NAMES = {
    INISIALISASI MAP
 ====================================================== */
 
-/* DATA VALIDASI LAPANGAN - TUTUPAN TAJUK */
-const DATA_VALIDASI_TAJUK = [
-  { plot: 1, lat: -5.55209, lon: 105.253377, tajuk: 67.72775 },
-  { plot: 2, lat: -5.551943, lon: 105.253581, tajuk: 76.39775 },
-  { plot: 3, lat: -5.551706, lon: 105.253428, tajuk: 84.059 },
-  { plot: 4, lat: -5.551882, lon: 105.25316, tajuk: 80.25175 },
-  { plot: 5, lat: -5.551978, lon: 105.25326, tajuk: 79.19125 },
-  { plot: 6, lat: -5.551882, lon: 105.253084, tajuk: 83.13325 },
-  { plot: 7, lat: -5.551718, lon: 105.253107, tajuk: 86.2 },
-  { plot: 8, lat: -5.551607, lon: 105.253179, tajuk: 82.41425 },
-  { plot: 9, lat: -5.55161, lon: 105.253095, tajuk: 79.64425 },
-  { plot: 10, lat: -5.55161, lon: 105.253099, tajuk: 83.02133333 },
-  { plot: 11, lat: -5.551396, lon: 105.253145, tajuk: 83.062 },
-  { plot: 12, lat: -5.551805, lon: 105.253462, tajuk: 81.0565 },
-  { plot: 13, lat: -5.551706, lon: 105.253428, tajuk: 83.395575 },
-  { plot: 14, lat: -5.55158, lon: 105.253305, tajuk: 80.7455 },
-  { plot: 15, lat: -5.551465, lon: 105.253282, tajuk: 81.255 },
-  { plot: 16, lat: -5.551407, lon: 105.253302, tajuk: 89.63566667 },
-  { plot: 17, lat: -5.551346, lon: 105.253271, tajuk: 86.66366667 },
-  { plot: 18, lat: -5.551277, lon: 105.253237, tajuk: 88.11466667 },
-  { plot: 19, lat: -5.55209, lon: 105.253377, tajuk: 79.491 },
-  { plot: 20, lat: -5.551943, lon: 105.253581, tajuk: 85.431 },
-  { plot: 21, lat: -5.551706, lon: 105.253428, tajuk: 85.73725 },
-  { plot: 22, lat: -5.551882, lon: 105.25316, tajuk: 83.14933333 },
-  { plot: 23, lat: -5.551978, lon: 105.25326, tajuk: 88.79775 },
-  { plot: 24, lat: -5.551882, lon: 105.253084, tajuk: 85.81075 },
-  { plot: 25, lat: -5.551718, lon: 105.253107, tajuk: 82.187 }
-];
+
+/* ======================================================
+   DATA VALIDASI DARI WEBGIS(1).csv — 31 PLOT
+   Nilai CSV disimpan apa adanya. Angka ambigu tidak ditebak.
+   Titik hanya dipetakan jika X/Y berupa angka desimal valid.
+====================================================== */
+const DATA_VALIDASI_CSV = [{"plot":1,"xRaw":"-5.551.209","yRaw":"105.253.377","lat":null,"lon":null,"tajukRaw":"6.772.775","tajuk":null,"pohonRaw":"1500","pohon":1500.0,"jenis":"rizhophora mucronata","issues":["Koordinat X perlu konfirmasi: -5.551.209","Koordinat Y perlu konfirmasi: 105.253.377","Persentase tajuk perlu konfirmasi: 6.772.775"]},{"plot":2,"xRaw":"-5.551.943","yRaw":"105.253.581","lat":null,"lon":null,"tajukRaw":"7.639.775","tajuk":null,"pohonRaw":"1700","pohon":1700.0,"jenis":"rizhophora mucronata","issues":["Koordinat X perlu konfirmasi: -5.551.943","Koordinat Y perlu konfirmasi: 105.253.581","Persentase tajuk perlu konfirmasi: 7.639.775"]},{"plot":3,"xRaw":"-5.551.706","yRaw":"105.253.428","lat":null,"lon":null,"tajukRaw":"84.059","tajuk":84.059,"pohonRaw":"1900","pohon":1900.0,"jenis":"rizhophora mucronata","issues":["Koordinat X perlu konfirmasi: -5.551.706","Koordinat Y perlu konfirmasi: 105.253.428"]},{"plot":4,"xRaw":"-5.551.882","yRaw":"10.525.316","lat":null,"lon":null,"tajukRaw":"8.025.175","tajuk":null,"pohonRaw":"1700","pohon":1700.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.882","Koordinat Y perlu konfirmasi: 10.525.316","Persentase tajuk perlu konfirmasi: 8.025.175"]},{"plot":5,"xRaw":"-5.551.978","yRaw":"10.525.326","lat":null,"lon":null,"tajukRaw":"7.919.125","tajuk":null,"pohonRaw":"1700","pohon":1700.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.978","Koordinat Y perlu konfirmasi: 10.525.326","Persentase tajuk perlu konfirmasi: 7.919.125"]},{"plot":6,"xRaw":"-5.551.882","yRaw":"105.253.084","lat":null,"lon":null,"tajukRaw":"8.313.325","tajuk":null,"pohonRaw":"1800","pohon":1800.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.882","Koordinat Y perlu konfirmasi: 105.253.084","Persentase tajuk perlu konfirmasi: 8.313.325"]},{"plot":7,"xRaw":"-5.551.718","yRaw":"105.253.107","lat":null,"lon":null,"tajukRaw":"86.2","tajuk":86.2,"pohonRaw":"2000","pohon":2000.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.718","Koordinat Y perlu konfirmasi: 105.253.107"]},{"plot":8,"xRaw":"-5.551.607","yRaw":"105.253.179","lat":null,"lon":null,"tajukRaw":"8.241.425","tajuk":null,"pohonRaw":"1900","pohon":1900.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.607","Koordinat Y perlu konfirmasi: 105.253.179","Persentase tajuk perlu konfirmasi: 8.241.425"]},{"plot":9,"xRaw":"-5.555.161","yRaw":"105.253.095","lat":null,"lon":null,"tajukRaw":"7.964.425","tajuk":null,"pohonRaw":"1900","pohon":1900.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.555.161","Koordinat Y perlu konfirmasi: 105.253.095","Persentase tajuk perlu konfirmasi: 7.964.425"]},{"plot":10,"xRaw":"-5.551.161","yRaw":"105.253.099","lat":null,"lon":null,"tajukRaw":"8.302.133.333","tajuk":null,"pohonRaw":"2000","pohon":2000.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.161","Koordinat Y perlu konfirmasi: 105.253.099","Persentase tajuk perlu konfirmasi: 8.302.133.333"]},{"plot":11,"xRaw":"-5.551.396","yRaw":"105.253.145","lat":null,"lon":null,"tajukRaw":"83.062","tajuk":83.062,"pohonRaw":"1900","pohon":1900.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.396","Koordinat Y perlu konfirmasi: 105.253.145"]},{"plot":12,"xRaw":"-5.551.805","yRaw":"105.253.462","lat":null,"lon":null,"tajukRaw":"810.565","tajuk":null,"pohonRaw":"1800","pohon":1800.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.805","Koordinat Y perlu konfirmasi: 105.253.462","Persentase tajuk perlu konfirmasi: 810.565"]},{"plot":13,"xRaw":"-5.551.706","yRaw":"105.253.428","lat":null,"lon":null,"tajukRaw":"83.395.575","tajuk":null,"pohonRaw":"2000","pohon":2000.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.706","Koordinat Y perlu konfirmasi: 105.253.428","Persentase tajuk perlu konfirmasi: 83.395.575"]},{"plot":14,"xRaw":"-5.551.158","yRaw":"105.253.305","lat":null,"lon":null,"tajukRaw":"807.455","tajuk":null,"pohonRaw":"1900","pohon":1900.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.158","Koordinat Y perlu konfirmasi: 105.253.305","Persentase tajuk perlu konfirmasi: 807.455"]},{"plot":15,"xRaw":"-5.551.465","yRaw":"105.253.282","lat":null,"lon":null,"tajukRaw":"81.255","tajuk":81.255,"pohonRaw":"1800","pohon":1800.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.465","Koordinat Y perlu konfirmasi: 105.253.282"]},{"plot":16,"xRaw":"-5.551.407","yRaw":"105.253.302","lat":null,"lon":null,"tajukRaw":"8.963.566.667","tajuk":null,"pohonRaw":"2500","pohon":2500.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.407","Koordinat Y perlu konfirmasi: 105.253.302","Persentase tajuk perlu konfirmasi: 8.963.566.667"]},{"plot":17,"xRaw":"-5.551.346","yRaw":"105.253.271","lat":null,"lon":null,"tajukRaw":"8.666.366.667","tajuk":null,"pohonRaw":"2400","pohon":2400.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.346","Koordinat Y perlu konfirmasi: 105.253.271","Persentase tajuk perlu konfirmasi: 8.666.366.667"]},{"plot":18,"xRaw":"-5.551.277","yRaw":"105.253.237","lat":null,"lon":null,"tajukRaw":"8.811.466.667","tajuk":null,"pohonRaw":"2500","pohon":2500.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.277","Koordinat Y perlu konfirmasi: 105.253.237","Persentase tajuk perlu konfirmasi: 8.811.466.667"]},{"plot":19,"xRaw":"-5.551.209","yRaw":"105.253.377","lat":null,"lon":null,"tajukRaw":"79.491","tajuk":79.491,"pohonRaw":"1900","pohon":1900.0,"jenis":"Bruguuiera Parviflora","issues":["Koordinat X perlu konfirmasi: -5.551.209","Koordinat Y perlu konfirmasi: 105.253.377"]},{"plot":20,"xRaw":"-5.551.943","yRaw":"105.253.581","lat":null,"lon":null,"tajukRaw":"85.431","tajuk":85.431,"pohonRaw":"2300","pohon":2300.0,"jenis":"Rizhopora Apiculata","issues":["Koordinat X perlu konfirmasi: -5.551.943","Koordinat Y perlu konfirmasi: 105.253.581"]},{"plot":21,"xRaw":"-5.551.706","yRaw":"105.253.428","lat":null,"lon":null,"tajukRaw":"8.573.725","tajuk":null,"pohonRaw":"2200","pohon":2200.0,"jenis":"Genus Rizhopora","issues":["Koordinat X perlu konfirmasi: -5.551.706","Koordinat Y perlu konfirmasi: 105.253.428","Persentase tajuk perlu konfirmasi: 8.573.725"]},{"plot":22,"xRaw":"-5.551.882","yRaw":"10.525.316","lat":null,"lon":null,"tajukRaw":"8.314.933.333","tajuk":null,"pohonRaw":"2100","pohon":2100.0,"jenis":"Rizhopora Apiculata","issues":["Koordinat X perlu konfirmasi: -5.551.882","Koordinat Y perlu konfirmasi: 10.525.316","Persentase tajuk perlu konfirmasi: 8.314.933.333"]},{"plot":23,"xRaw":"-5.551.978","yRaw":"10.525.326","lat":null,"lon":null,"tajukRaw":"8.879.775","tajuk":null,"pohonRaw":"2400","pohon":2400.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.978","Koordinat Y perlu konfirmasi: 10.525.326","Persentase tajuk perlu konfirmasi: 8.879.775"]},{"plot":24,"xRaw":"-5.551.882","yRaw":"105.253.084","lat":null,"lon":null,"tajukRaw":"8.581.075","tajuk":null,"pohonRaw":"2300","pohon":2300.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.882","Koordinat Y perlu konfirmasi: 105.253.084","Persentase tajuk perlu konfirmasi: 8.581.075"]},{"plot":25,"xRaw":"-5.551.718","yRaw":"105.253.107","lat":null,"lon":null,"tajukRaw":"82.187","tajuk":82.187,"pohonRaw":"2000","pohon":2000.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.718","Koordinat Y perlu konfirmasi: 105.253.107"]},{"plot":26,"xRaw":"-5.551.607","yRaw":"105.253.179","lat":null,"lon":null,"tajukRaw":"806.465","tajuk":null,"pohonRaw":"1900","pohon":1900.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.607","Koordinat Y perlu konfirmasi: 105.253.179","Persentase tajuk perlu konfirmasi: 806.465"]},{"plot":27,"xRaw":"-5.551.161","yRaw":"105.253.095","lat":null,"lon":null,"tajukRaw":"78.457","tajuk":78.457,"pohonRaw":"1800","pohon":1800.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.161","Koordinat Y perlu konfirmasi: 105.253.095"]},{"plot":28,"xRaw":"-5.551.161","yRaw":"105.253.099","lat":null,"lon":null,"tajukRaw":"83.021","tajuk":83.021,"pohonRaw":"2100","pohon":2100.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.161","Koordinat Y perlu konfirmasi: 105.253.099"]},{"plot":29,"xRaw":"-5.551.396","yRaw":"105.253.145","lat":null,"lon":null,"tajukRaw":"7.580.475","tajuk":null,"pohonRaw":"1700","pohon":1700.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.396","Koordinat Y perlu konfirmasi: 105.253.145","Persentase tajuk perlu konfirmasi: 7.580.475"]},{"plot":30,"xRaw":"-5.551.805","yRaw":"105.253.462","lat":null,"lon":null,"tajukRaw":"84.146","tajuk":84.146,"pohonRaw":"2300","pohon":2300.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.805","Koordinat Y perlu konfirmasi: 105.253.462"]},{"plot":31,"xRaw":"-5.551.706","yRaw":"105.253.428","lat":null,"lon":null,"tajukRaw":"7.896.225","tajuk":null,"pohonRaw":"1900","pohon":1900.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.706","Koordinat Y perlu konfirmasi: 105.253.428","Persentase tajuk perlu konfirmasi: 7.896.225"]}];
 
 const validationLayer = L.layerGroup();
-DATA_VALIDASI_TAJUK.forEach(function(data) {
+
+DATA_VALIDASI_CSV.forEach(function(data) {
+    // Jangan letakkan titik di peta bila koordinat sumber belum valid.
+    if (data.lat === null || data.lon === null) return;
+
     const marker = L.circleMarker([data.lat, data.lon], {
         radius: 6,
         color: "#ffffff",
@@ -1030,13 +1013,22 @@ DATA_VALIDASI_TAJUK.forEach(function(data) {
         fillColor: "#00BFFF",
         fillOpacity: 0.95
     });
+
+    const issuesText = data.issues.length
+        ? `<hr><b>Perlu konfirmasi:</b><br>${data.issues.join("<br>")}`
+        : "";
+
     marker.bindPopup(`
-        <div class="popup-title">Validasi Tutupan Tajuk</div>
-        <div><b>Plot:</b> ${data.plot}</div>
-        <div><b>Latitude (X):</b> ${data.lat}</div>
-        <div><b>Longitude (Y):</b> ${data.lon}</div>
-        <div><b>Persentase Tajuk:</b> ${data.tajuk}%</div>
+        <div class="popup-title">Validasi Lapangan Mangrove</div>
+        <b>Plot:</b> ${data.plot}<br>
+        <b>Latitude (X):</b> ${data.lat}<br>
+        <b>Longitude (Y):</b> ${data.lon}<br>
+        <b>Persentase Tajuk:</b> ${data.tajuk === null ? "Perlu konfirmasi (" + data.tajukRaw + ")" : data.tajuk + "%"}<br>
+        <b>Rata-rata Pohon/ha:</b> ${data.pohon === null ? data.pohonRaw : data.pohon}<br>
+        <b>Jenis Pohon:</b> ${data.jenis}
+        ${issuesText}
     `);
+
     marker.addTo(validationLayer);
 });
 
