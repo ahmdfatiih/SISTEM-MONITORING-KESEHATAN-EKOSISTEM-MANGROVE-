@@ -994,43 +994,9 @@ const CLASS_NAMES = {
 
 
 /* ======================================================
-   DATA VALIDASI DARI WEBGIS(1).csv — 31 PLOT
-   Nilai CSV disimpan apa adanya. Angka ambigu tidak ditebak.
-   Titik hanya dipetakan jika X/Y berupa angka desimal valid.
+   LAYER VALIDASI LAPANGAN 2026
+   Data dibaca dari DATA/validasi_mangrove.geojson
 ====================================================== */
-const DATA_VALIDASI_CSV = [{"plot":1,"xRaw":"-5.551.209","yRaw":"105.253.377","lat":null,"lon":null,"tajukRaw":"6.772.775","tajuk":null,"pohonRaw":"1500","pohon":1500.0,"jenis":"rizhophora mucronata","issues":["Koordinat X perlu konfirmasi: -5.551.209","Koordinat Y perlu konfirmasi: 105.253.377","Persentase tajuk perlu konfirmasi: 6.772.775"]},{"plot":2,"xRaw":"-5.551.943","yRaw":"105.253.581","lat":null,"lon":null,"tajukRaw":"7.639.775","tajuk":null,"pohonRaw":"1700","pohon":1700.0,"jenis":"rizhophora mucronata","issues":["Koordinat X perlu konfirmasi: -5.551.943","Koordinat Y perlu konfirmasi: 105.253.581","Persentase tajuk perlu konfirmasi: 7.639.775"]},{"plot":3,"xRaw":"-5.551.706","yRaw":"105.253.428","lat":null,"lon":null,"tajukRaw":"84.059","tajuk":84.059,"pohonRaw":"1900","pohon":1900.0,"jenis":"rizhophora mucronata","issues":["Koordinat X perlu konfirmasi: -5.551.706","Koordinat Y perlu konfirmasi: 105.253.428"]},{"plot":4,"xRaw":"-5.551.882","yRaw":"10.525.316","lat":null,"lon":null,"tajukRaw":"8.025.175","tajuk":null,"pohonRaw":"1700","pohon":1700.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.882","Koordinat Y perlu konfirmasi: 10.525.316","Persentase tajuk perlu konfirmasi: 8.025.175"]},{"plot":5,"xRaw":"-5.551.978","yRaw":"10.525.326","lat":null,"lon":null,"tajukRaw":"7.919.125","tajuk":null,"pohonRaw":"1700","pohon":1700.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.978","Koordinat Y perlu konfirmasi: 10.525.326","Persentase tajuk perlu konfirmasi: 7.919.125"]},{"plot":6,"xRaw":"-5.551.882","yRaw":"105.253.084","lat":null,"lon":null,"tajukRaw":"8.313.325","tajuk":null,"pohonRaw":"1800","pohon":1800.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.882","Koordinat Y perlu konfirmasi: 105.253.084","Persentase tajuk perlu konfirmasi: 8.313.325"]},{"plot":7,"xRaw":"-5.551.718","yRaw":"105.253.107","lat":null,"lon":null,"tajukRaw":"86.2","tajuk":86.2,"pohonRaw":"2000","pohon":2000.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.718","Koordinat Y perlu konfirmasi: 105.253.107"]},{"plot":8,"xRaw":"-5.551.607","yRaw":"105.253.179","lat":null,"lon":null,"tajukRaw":"8.241.425","tajuk":null,"pohonRaw":"1900","pohon":1900.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.607","Koordinat Y perlu konfirmasi: 105.253.179","Persentase tajuk perlu konfirmasi: 8.241.425"]},{"plot":9,"xRaw":"-5.555.161","yRaw":"105.253.095","lat":null,"lon":null,"tajukRaw":"7.964.425","tajuk":null,"pohonRaw":"1900","pohon":1900.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.555.161","Koordinat Y perlu konfirmasi: 105.253.095","Persentase tajuk perlu konfirmasi: 7.964.425"]},{"plot":10,"xRaw":"-5.551.161","yRaw":"105.253.099","lat":null,"lon":null,"tajukRaw":"8.302.133.333","tajuk":null,"pohonRaw":"2000","pohon":2000.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.161","Koordinat Y perlu konfirmasi: 105.253.099","Persentase tajuk perlu konfirmasi: 8.302.133.333"]},{"plot":11,"xRaw":"-5.551.396","yRaw":"105.253.145","lat":null,"lon":null,"tajukRaw":"83.062","tajuk":83.062,"pohonRaw":"1900","pohon":1900.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.396","Koordinat Y perlu konfirmasi: 105.253.145"]},{"plot":12,"xRaw":"-5.551.805","yRaw":"105.253.462","lat":null,"lon":null,"tajukRaw":"810.565","tajuk":null,"pohonRaw":"1800","pohon":1800.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.805","Koordinat Y perlu konfirmasi: 105.253.462","Persentase tajuk perlu konfirmasi: 810.565"]},{"plot":13,"xRaw":"-5.551.706","yRaw":"105.253.428","lat":null,"lon":null,"tajukRaw":"83.395.575","tajuk":null,"pohonRaw":"2000","pohon":2000.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.706","Koordinat Y perlu konfirmasi: 105.253.428","Persentase tajuk perlu konfirmasi: 83.395.575"]},{"plot":14,"xRaw":"-5.551.158","yRaw":"105.253.305","lat":null,"lon":null,"tajukRaw":"807.455","tajuk":null,"pohonRaw":"1900","pohon":1900.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.158","Koordinat Y perlu konfirmasi: 105.253.305","Persentase tajuk perlu konfirmasi: 807.455"]},{"plot":15,"xRaw":"-5.551.465","yRaw":"105.253.282","lat":null,"lon":null,"tajukRaw":"81.255","tajuk":81.255,"pohonRaw":"1800","pohon":1800.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.465","Koordinat Y perlu konfirmasi: 105.253.282"]},{"plot":16,"xRaw":"-5.551.407","yRaw":"105.253.302","lat":null,"lon":null,"tajukRaw":"8.963.566.667","tajuk":null,"pohonRaw":"2500","pohon":2500.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.407","Koordinat Y perlu konfirmasi: 105.253.302","Persentase tajuk perlu konfirmasi: 8.963.566.667"]},{"plot":17,"xRaw":"-5.551.346","yRaw":"105.253.271","lat":null,"lon":null,"tajukRaw":"8.666.366.667","tajuk":null,"pohonRaw":"2400","pohon":2400.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.346","Koordinat Y perlu konfirmasi: 105.253.271","Persentase tajuk perlu konfirmasi: 8.666.366.667"]},{"plot":18,"xRaw":"-5.551.277","yRaw":"105.253.237","lat":null,"lon":null,"tajukRaw":"8.811.466.667","tajuk":null,"pohonRaw":"2500","pohon":2500.0,"jenis":"rizhophora stylosa","issues":["Koordinat X perlu konfirmasi: -5.551.277","Koordinat Y perlu konfirmasi: 105.253.237","Persentase tajuk perlu konfirmasi: 8.811.466.667"]},{"plot":19,"xRaw":"-5.551.209","yRaw":"105.253.377","lat":null,"lon":null,"tajukRaw":"79.491","tajuk":79.491,"pohonRaw":"1900","pohon":1900.0,"jenis":"Bruguuiera Parviflora","issues":["Koordinat X perlu konfirmasi: -5.551.209","Koordinat Y perlu konfirmasi: 105.253.377"]},{"plot":20,"xRaw":"-5.551.943","yRaw":"105.253.581","lat":null,"lon":null,"tajukRaw":"85.431","tajuk":85.431,"pohonRaw":"2300","pohon":2300.0,"jenis":"Rizhopora Apiculata","issues":["Koordinat X perlu konfirmasi: -5.551.943","Koordinat Y perlu konfirmasi: 105.253.581"]},{"plot":21,"xRaw":"-5.551.706","yRaw":"105.253.428","lat":null,"lon":null,"tajukRaw":"8.573.725","tajuk":null,"pohonRaw":"2200","pohon":2200.0,"jenis":"Genus Rizhopora","issues":["Koordinat X perlu konfirmasi: -5.551.706","Koordinat Y perlu konfirmasi: 105.253.428","Persentase tajuk perlu konfirmasi: 8.573.725"]},{"plot":22,"xRaw":"-5.551.882","yRaw":"10.525.316","lat":null,"lon":null,"tajukRaw":"8.314.933.333","tajuk":null,"pohonRaw":"2100","pohon":2100.0,"jenis":"Rizhopora Apiculata","issues":["Koordinat X perlu konfirmasi: -5.551.882","Koordinat Y perlu konfirmasi: 10.525.316","Persentase tajuk perlu konfirmasi: 8.314.933.333"]},{"plot":23,"xRaw":"-5.551.978","yRaw":"10.525.326","lat":null,"lon":null,"tajukRaw":"8.879.775","tajuk":null,"pohonRaw":"2400","pohon":2400.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.978","Koordinat Y perlu konfirmasi: 10.525.326","Persentase tajuk perlu konfirmasi: 8.879.775"]},{"plot":24,"xRaw":"-5.551.882","yRaw":"105.253.084","lat":null,"lon":null,"tajukRaw":"8.581.075","tajuk":null,"pohonRaw":"2300","pohon":2300.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.882","Koordinat Y perlu konfirmasi: 105.253.084","Persentase tajuk perlu konfirmasi: 8.581.075"]},{"plot":25,"xRaw":"-5.551.718","yRaw":"105.253.107","lat":null,"lon":null,"tajukRaw":"82.187","tajuk":82.187,"pohonRaw":"2000","pohon":2000.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.718","Koordinat Y perlu konfirmasi: 105.253.107"]},{"plot":26,"xRaw":"-5.551.607","yRaw":"105.253.179","lat":null,"lon":null,"tajukRaw":"806.465","tajuk":null,"pohonRaw":"1900","pohon":1900.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.607","Koordinat Y perlu konfirmasi: 105.253.179","Persentase tajuk perlu konfirmasi: 806.465"]},{"plot":27,"xRaw":"-5.551.161","yRaw":"105.253.095","lat":null,"lon":null,"tajukRaw":"78.457","tajuk":78.457,"pohonRaw":"1800","pohon":1800.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.161","Koordinat Y perlu konfirmasi: 105.253.095"]},{"plot":28,"xRaw":"-5.551.161","yRaw":"105.253.099","lat":null,"lon":null,"tajukRaw":"83.021","tajuk":83.021,"pohonRaw":"2100","pohon":2100.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.161","Koordinat Y perlu konfirmasi: 105.253.099"]},{"plot":29,"xRaw":"-5.551.396","yRaw":"105.253.145","lat":null,"lon":null,"tajukRaw":"7.580.475","tajuk":null,"pohonRaw":"1700","pohon":1700.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.396","Koordinat Y perlu konfirmasi: 105.253.145","Persentase tajuk perlu konfirmasi: 7.580.475"]},{"plot":30,"xRaw":"-5.551.805","yRaw":"105.253.462","lat":null,"lon":null,"tajukRaw":"84.146","tajuk":84.146,"pohonRaw":"2300","pohon":2300.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.805","Koordinat Y perlu konfirmasi: 105.253.462"]},{"plot":31,"xRaw":"-5.551.706","yRaw":"105.253.428","lat":null,"lon":null,"tajukRaw":"7.896.225","tajuk":null,"pohonRaw":"1900","pohon":1900.0,"jenis":"RIZHOPORA MICRONATA","issues":["Koordinat X perlu konfirmasi: -5.551.706","Koordinat Y perlu konfirmasi: 105.253.428","Persentase tajuk perlu konfirmasi: 7.896.225"]}];
-
-const validationLayer = L.layerGroup();
-
-DATA_VALIDASI_CSV.forEach(function(data) {
-    // Jangan letakkan titik di peta bila koordinat sumber belum valid.
-    if (data.lat === null || data.lon === null) return;
-
-    const marker = L.circleMarker([data.lat, data.lon], {
-        radius: 6,
-        color: "#ffffff",
-        weight: 1.5,
-        fillColor: "#00BFFF",
-        fillOpacity: 0.95
-    });
-
-    const issuesText = data.issues.length
-        ? `<hr><b>Perlu konfirmasi:</b><br>${data.issues.join("<br>")}`
-        : "";
-
-    marker.bindPopup(`
-        <div class="popup-title">Validasi Lapangan Mangrove</div>
-        <b>Plot:</b> ${data.plot}<br>
-        <b>Latitude (X):</b> ${data.lat}<br>
-        <b>Longitude (Y):</b> ${data.lon}<br>
-        <b>Persentase Tajuk:</b> ${data.tajuk === null ? "Perlu konfirmasi (" + data.tajukRaw + ")" : data.tajuk + "%"}<br>
-        <b>Rata-rata Pohon/ha:</b> ${data.pohon === null ? data.pohonRaw : data.pohon}<br>
-        <b>Jenis Pohon:</b> ${data.jenis}
-        ${issuesText}
-    `);
-
-    marker.addTo(validationLayer);
-});
 
 const map = L.map(
 
@@ -1091,6 +1057,65 @@ const osm = L.tileLayer(
 
 
 /* ======================================================
+   LAYER VALIDASI GEOJSON 2026
+====================================================== */
+
+// Ambil nilai atribut tanpa bergantung pada kapitalisasi nama field.
+function getValidationProperty(properties, aliases) {
+    if (!properties) return null;
+    const keys = Object.keys(properties);
+    for (const alias of aliases) {
+        const match = keys.find(key => key.toLowerCase().replace(/[^a-z0-9]/g, "") === alias.toLowerCase().replace(/[^a-z0-9]/g, ""));
+        if (match !== undefined && properties[match] !== null && properties[match] !== "") return properties[match];
+    }
+    return null;
+}
+
+function escapePopup(value) {
+    return String(value === null || value === undefined || value === "" ? "Tidak tersedia" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+const validationLayer = L.geoJSON(null, {
+    pointToLayer: function(feature, latlng) {
+        return L.circleMarker(latlng, {
+            radius: 6,
+            color: "#ffffff",
+            weight: 1.5,
+            fillColor: "#00BFFF",
+            fillOpacity: 0.95
+        });
+    },
+    onEachFeature: function(feature, layer) {
+        const p = feature.properties || {};
+        const plot = getValidationProperty(p, ["PLOT", "plot", "id_plot", "nomor_plot"]);
+        const tajuk = getValidationProperty(p, ["PERSENTASE_TAJUK", "persentase tajuk", "tajuk", "persentase_tutupan_tajuk", "PERSENTASE_TUTUPAN_TAJUK"]);
+        const pohon = getValidationProperty(p, ["RATA_RATA_POHON_HA", "RATA-RATA POHON / ha", "rata_rata_pohon_ha", "rata-rata pohon/ha", "pohon_ha", "jumlah_pohon_ha"]);
+        const jenis = getValidationProperty(p, ["JENIS_POHON", "jenis pohon", "jenis", "spesies", "jenis_mangrove"]);
+        const lat = layer.getLatLng().lat;
+        const lon = layer.getLatLng().lng;
+        const tajukText = tajuk === null ? "Tidak tersedia" : escapePopup(tajuk) + (String(tajuk).includes("%") ? "" : "%");
+
+        layer.bindPopup(`
+            <div class="popup-title">Validasi Lapangan Mangrove 2026</div>
+            <b>Plot:</b> ${escapePopup(plot)}<br>
+            <b>Persentase Tajuk:</b> ${tajukText}<br>
+            <b>Rata-rata Pohon/ha:</b> ${escapePopup(pohon)}<br>
+            <b>Jenis Pohon:</b> ${escapePopup(jenis)}<br>
+            <hr style="margin:7px 0">
+            <span style="font-size:11px;color:#666">Koordinat: ${lat.toFixed(6)}, ${lon.toFixed(6)}</span>
+        `);
+    }
+});
+
+// Tampilkan layer titik secara default; pengguna tetap dapat mematikannya dari kontrol layer.
+validationLayer.addTo(map);
+
+/* ======================================================
    BASEMAP CONTROL
 ====================================================== */
 
@@ -1100,12 +1125,38 @@ L.control.layers(
         "OpenStreetMap": osm
     },
     {
-        "Titik Validasi Tutupan Tajuk": validationLayer
+        "Validasi Lapangan Mangrove 2026 (31 Plot)": validationLayer
     },
     {
-        position: "topright"
+        position: "topright",
+        collapsed: false
     }
 ).addTo(map);
+
+/* ======================================================
+   MEMUAT FILE GEOJSON VALIDASI
+====================================================== */
+
+fetch("DATA/validasi_mangrove.geojson?v=" + Date.now())
+    .then(function(response) {
+        if (!response.ok) throw new Error("File DATA/validasi_mangrove.geojson tidak ditemukan (HTTP " + response.status + ")");
+        return response.json();
+    })
+    .then(function(geojson) {
+        if (!geojson || geojson.type !== "FeatureCollection" || !Array.isArray(geojson.features)) {
+            throw new Error("Format GeoJSON tidak sesuai. Ekspor sebagai FeatureCollection.");
+        }
+        validationLayer.addData(geojson);
+        console.info("Layer validasi mangrove berhasil dimuat:", geojson.features.length, "fitur");
+    })
+    .catch(function(err) {
+        console.error("Gagal memuat layer validasi mangrove:", err);
+        const errorBox = document.getElementById("error");
+        if (errorBox) {
+            errorBox.innerHTML = "<b>Layer validasi belum dapat dimuat.</b><br>Pastikan file tersedia di <b>DATA/validasi_mangrove.geojson</b> dan nama folder/file sama persis.";
+            errorBox.classList.add("active");
+        }
+    });
 
 
 /* ======================================================
