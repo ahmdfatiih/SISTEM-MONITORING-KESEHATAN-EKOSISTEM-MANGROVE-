@@ -1096,18 +1096,24 @@ const validationLayer = L.geoJSON(null, {
         const tajuk = getValidationProperty(p, ["PERSENTASE_TAJUK", "persentase tajuk", "tajuk", "persentase_tutupan_tajuk", "PERSENTASE_TUTUPAN_TAJUK"]);
         const pohon = getValidationProperty(p, ["RATA_RATA_POHON_HA", "RATA-RATA POHON / ha", "rata_rata_pohon_ha", "rata-rata pohon/ha", "pohon_ha", "jumlah_pohon_ha"]);
         const jenis = getValidationProperty(p, ["JENIS_POHON", "jenis pohon", "jenis", "spesies", "jenis_mangrove"]);
+        const keterangan = getValidationProperty(p, ["KETERANGAN", "keterangan", "deskripsi", "catatan", "remarks", "informasi"]);
         const lat = layer.getLatLng().lat;
         const lon = layer.getLatLng().lng;
         const tajukText = tajuk === null ? "Tidak tersedia" : escapePopup(tajuk) + (String(tajuk).includes("%") ? "" : "%");
+        const keteranganText = keterangan === null
+            ? "Titik pengamatan validasi lapangan mangrove tahun 2026. Informasi disajikan berdasarkan atribut pada GeoJSON."
+            : escapePopup(keterangan);
 
         layer.bindPopup(`
             <div class="popup-title">Validasi Lapangan Mangrove 2026</div>
             <b>Plot:</b> ${escapePopup(plot)}<br>
+            <b>Koordinat:</b><br>
+            Latitude: ${lat.toFixed(6)}<br>
+            Longitude: ${lon.toFixed(6)}<br>
             <b>Persentase Tajuk:</b> ${tajukText}<br>
             <b>Rata-rata Pohon/ha:</b> ${escapePopup(pohon)}<br>
             <b>Jenis Pohon:</b> ${escapePopup(jenis)}<br>
-            <hr style="margin:7px 0">
-            <span style="font-size:11px;color:#666">Koordinat: ${lat.toFixed(6)}, ${lon.toFixed(6)}</span>
+            <b>Keterangan:</b> ${keteranganText}
         `);
     }
 });
